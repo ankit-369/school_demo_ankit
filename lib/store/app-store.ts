@@ -2,32 +2,65 @@
 
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { createSessionSlice, type SessionSlice } from "./slices/session-slice";
-import { createStudentsSlice, type StudentsSlice } from "./slices/students-slice";
-import { createCampsSlice, type CampsSlice } from "./slices/camps-slice";
-import { createStaffSlice, type StaffSlice } from "./slices/staff-slice";
+import { createSeedData } from "@/lib/data/seed";
+import { createAuditSlice } from "./slices/audit-slice";
+import { createCampsSlice } from "./slices/camps-slice";
+import { createConsentSlice } from "./slices/consent-slice";
+import { createNotesSlice } from "./slices/notes-slice";
+import { createNotificationsSlice } from "./slices/notifications-slice";
+import { createReportsSlice } from "./slices/reports-slice";
+import { createStaffSlice } from "./slices/staff-slice";
+import { createStudentsSlice } from "./slices/students-slice";
+import { createUiSlice } from "./slices/ui-slice";
+import type { AppState, DemoData } from "./state";
 
-export type AppState = SessionSlice & StudentsSlice & CampsSlice & StaffSlice;
+export type { AppState, DemoData } from "./state";
+
+const STORE_VERSION = 2;
+
+type PersistedState = DemoData & Pick<AppState, "role">;
 
 /**
  * The app's single mock "database", persisted to localStorage.
+ * Components read with selectors and change data only through these actions.
  * Hydration is deferred (see <StoreHydrator />) so server and first client
- * render match.
+ * render match — both start from the seed.
  */
 export const useAppStore = create<AppState>()(
   persist(
     (...a) => ({
-      ...createSessionSlice(...a),
+      ...createUiSlice(...a),
       ...createStudentsSlice(...a),
-      ...createCampsSlice(...a),
       ...createStaffSlice(...a),
+      ...createCampsSlice(...a),
+      ...createReportsSlice(...a),
+      ...createNotesSlice(...a),
+      ...createNotificationsSlice(...a),
+      ...createConsentSlice(...a),
+      ...createAuditSlice(...a),
+      ...createSeedData(),
     }),
     {
       name: "healthconnect-db",
-      version: 1,
+      version: STORE_VERSION,
       storage: createJSONStorage(() => localStorage),
       skipHydration: true,
-      partialize: ({ role, students, camps, staff }) => ({ role, students, camps, staff }),
+      partialize: (s): PersistedState => ({
+        role: s.role,
+        students: s.students,
+        staff: s.staff,
+        camps: s.camps,
+        notes: s.notes,
+        reports: s.reports,
+        notifications: s.notifications,
+        consents: s.consents,
+        auditLog: s.auditLog,
+      }),
+      // Phase 0 stored only the role; anything older than the current shape reseeds.
+      migrate: (persisted, version) => {
+        const role = (persisted as Partial<PersistedState> | undefined)?.role ?? "admin";
+        return version < STORE_VERSION ? { ...createSeedData(), role } : (persisted as PersistedState);
+      },
     },
   ),
 );
