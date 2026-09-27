@@ -2,7 +2,10 @@ import type { Notification } from "@/lib/types/notification";
 import { newId, nowIso } from "../helpers";
 import type { SliceCreator } from "../state";
 
-export type SendNotificationInput = Pick<Notification, "studentId" | "type" | "message" | "channel">;
+export type SendNotificationInput = Pick<Notification, "studentId" | "type" | "message" | "channel"> & {
+  /** Defaults to now; pass to tie the notification to another record's timestamp. */
+  createdAt?: string;
+};
 
 export type NotificationsSlice = {
   notifications: Notification[];
@@ -13,10 +16,10 @@ export type NotificationsSlice = {
 
 export const createNotificationsSlice: SliceCreator<NotificationsSlice> = (set) => ({
   notifications: [],
-  sendNotification: (input) => {
+  sendNotification: ({ createdAt = nowIso(), ...input }) => {
     const id = newId("ntf");
     set((s) => ({
-      notifications: [{ ...input, id, status: "sent", createdAt: nowIso() }, ...s.notifications],
+      notifications: [{ ...input, id, status: "sent", createdAt }, ...s.notifications],
     }));
     return id;
   },

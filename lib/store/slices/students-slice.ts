@@ -1,6 +1,6 @@
 import { computeBmi, teacherFor } from "@/lib/data/seed/student-factory";
 import { GRADES, classKey, type Division, type Grade } from "@/lib/types/grade";
-import type { SchoolMedicalHistory } from "@/lib/types/medical-history";
+import type { SchoolMedicalHistory, Surgery } from "@/lib/types/medical-history";
 import type { Staff } from "@/lib/types/staff";
 import type { Student, StudentStatus } from "@/lib/types/student";
 import { newId } from "../helpers";
@@ -29,6 +29,7 @@ export type StudentsSlice = {
   addStudent: (input: NewStudentInput) => string;
   updateStudent: (id: string, patch: StudentPatch, reason?: string) => void;
   updateSchoolMedicalHistory: (id: string, patch: Partial<SchoolMedicalHistory>, reason?: string) => void;
+  addSurgery: (id: string, surgery: Omit<Surgery, "id">) => void;
   promoteStudents: (input: PromoteInput) => { promoted: number; graduated: number };
   setStudentStatus: (id: string, status: StudentStatus, reason: string) => void;
 };
@@ -86,6 +87,17 @@ export const createStudentsSlice: SliceCreator<StudentsSlice> = (set, get) => {
         medicalHistory: { ...s.medicalHistory, school: { ...s.medicalHistory.school, ...patch } },
       }));
       get().logAudit("medical-history.updated", nameOf(id), reason);
+    },
+
+    addSurgery: (id, surgery) => {
+      replace(id, (s) => ({
+        ...s,
+        medicalHistory: {
+          ...s.medicalHistory,
+          school: { ...s.medicalHistory.school, surgeries: [{ ...surgery, id: newId("surg") }, ...s.medicalHistory.school.surgeries] },
+        },
+      }));
+      get().logAudit("medical-history.surgery-added", nameOf(id), surgery.name);
     },
 
     promoteStudents: ({ studentIds, toGrade, toDivision, reason }) => {

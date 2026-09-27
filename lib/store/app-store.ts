@@ -6,6 +6,7 @@ import { createSeedData } from "@/lib/data/seed";
 import { createAuditSlice } from "./slices/audit-slice";
 import { createCampsSlice } from "./slices/camps-slice";
 import { createConsentSlice } from "./slices/consent-slice";
+import { createHfilesSlice } from "./slices/hfiles-slice";
 import { createNotesSlice } from "./slices/notes-slice";
 import { createNotificationsSlice } from "./slices/notifications-slice";
 import { createReportsSlice } from "./slices/reports-slice";
@@ -37,6 +38,7 @@ export const useAppStore = create<AppState>()(
       ...createNotesSlice(...a),
       ...createNotificationsSlice(...a),
       ...createConsentSlice(...a),
+      ...createHfilesSlice(...a),
       ...createAuditSlice(...a),
       ...createSeedData(),
     }),

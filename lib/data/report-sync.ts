@@ -1,15 +1,7 @@
+import { REPORT_CATEGORY_LABELS } from "@/lib/labels";
 import type { LabReport } from "@/lib/types/medical-history";
 import type { Report } from "@/lib/types/report";
 import type { Student } from "@/lib/types/student";
-
-const CATEGORY_LABELS: Record<Report["category"], string> = {
-  lab: "Lab result",
-  prescription: "Prescription",
-  imaging: "Imaging",
-  screening: "Screening report",
-  vaccination: "Vaccination record",
-  other: "Document",
-};
 
 export function reportToLabEntry(report: Report): LabReport {
   return {
@@ -17,7 +9,7 @@ export function reportToLabEntry(report: Report): LabReport {
     name: report.fileName.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " "),
     date: report.uploadDate,
     lab: "Shanti Asiatic School",
-    summary: `${CATEGORY_LABELS[report.category]} uploaded by ${report.uploadedBy}.`,
+    summary: `${REPORT_CATEGORY_LABELS[report.category]} uploaded by ${report.uploadedBy}.`,
     reportId: report.id,
   };
 }

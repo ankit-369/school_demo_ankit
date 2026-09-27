@@ -10,6 +10,7 @@ import type { Student } from "@/lib/types/student";
 import type { AuditSlice } from "./slices/audit-slice";
 import type { CampsSlice } from "./slices/camps-slice";
 import type { ConsentSlice } from "./slices/consent-slice";
+import type { HfilesSlice } from "./slices/hfiles-slice";
 import type { NotesSlice } from "./slices/notes-slice";
 import type { NotificationsSlice } from "./slices/notifications-slice";
 import type { ReportsSlice } from "./slices/reports-slice";
@@ -37,6 +38,7 @@ export type AppState = UiSlice &
   NotesSlice &
   NotificationsSlice &
   ConsentSlice &
+  HfilesSlice &
   AuditSlice;
 
 export type SliceCreator<T> = StateCreator<AppState, [["zustand/persist", unknown]], [], T>;

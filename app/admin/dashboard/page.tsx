@@ -1,38 +1,29 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { HydrationGate } from "@/components/ui/hydration-gate";
 import { PageHeader } from "@/components/ui/page-header";
-import { SectionHeading } from "@/components/ui/section-heading";
-import { KpiOverview } from "./_components/kpi-overview";
-import { PrimitivesPreview } from "./_components/primitives-preview";
-import { RecentCampsTable } from "./_components/recent-camps-table";
-import { ScheduleCampButton } from "./_components/schedule-camp-button";
+import { SkeletonBlock } from "@/components/ui/skeleton-block";
+import { DashboardView } from "./_components/dashboard-view";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
 export default function AdminDashboardPage() {
   return (
-    <div className="flex flex-col gap-8 lg:gap-10">
+    <div className="flex flex-col gap-8">
       <PageHeader
         title="Hello, Mr. Ankit"
         description="Here's today's health overview for Shanti Asiatic School."
-        actions={<ScheduleCampButton />}
       />
-      <KpiOverview />
-      <section className="flex flex-col gap-4">
-        <SectionHeading
-          title="Recent health camps"
-          actions={
-            <Link
-              href="/admin/camps"
-              className="rounded-sm text-sm font-medium text-primary hover:underline"
-            >
-              View all
-            </Link>
-          }
-        />
-        <RecentCampsTable />
-      </section>
-      <PrimitivesPreview />
+      <HydrationGate
+        fallback={
+          <div className="flex flex-col gap-4">
+            <SkeletonBlock className="h-9 w-full" />
+            <SkeletonBlock className="h-64 w-full rounded-xl xl:h-32" />
+            <SkeletonBlock className="mt-6 h-72 w-full rounded-xl" />
+          </div>
+        }
+      >
+        <DashboardView />
+      </HydrationGate>
     </div>
   );
 }
