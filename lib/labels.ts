@@ -4,6 +4,7 @@ import type { NotificationChannel, NotificationStatus } from "@/lib/types/notifi
 import type { ReportCategory } from "@/lib/types/report";
 import type { ScreeningResultStatus, ScreeningType } from "@/lib/types/screening";
 import type { StatusTone } from "@/lib/types/status";
+import type { StaffRole, StaffStatus } from "@/lib/types/staff";
 import type { HearingStatus, StudentStatus } from "@/lib/types/student";
 
 type ToneLabel = { tone: StatusTone; label: string };
@@ -66,4 +67,18 @@ export const NOTIFICATION_STATUS: Record<NotificationStatus, ToneLabel> = {
   sent: { tone: "neutral", label: "Sent" },
   delivered: { tone: "success", label: "Delivered" },
   failed: { tone: "danger", label: "Failed" },
+};
+
+export const STAFF_ROLE_LABELS: Record<StaffRole, string> = {
+  principal: "Principal",
+  admin: "Administrator",
+  teacher: "Teacher",
+  nurse: "Nurse",
+  registrar: "Registrar",
+};
+
+export const STAFF_STATUS: Record<StaffStatus, ToneLabel> = {
+  active: { tone: "success", label: "Active" },
+  "on-leave": { tone: "warning", label: "On leave" },
+  inactive: { tone: "neutral", label: "Inactive" },
 };

@@ -5,7 +5,7 @@ import { SourceBadge } from "@/components/ui/source-badge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { HealthFlags } from "@/components/students/health-flags";
 import { formatDate } from "@/lib/format";
-import { useAppStore } from "@/lib/store/app-store";
+import { useCan } from "@/lib/hooks/use-can";
 import type { Surgery } from "@/lib/types/medical-history";
 import type { Student } from "@/lib/types/student";
 import { AddSurgeryDialog } from "./add-surgery-dialog";
@@ -19,14 +19,13 @@ const OUTCOME: Record<Surgery["outcome"], Parameters<typeof StatusBadge>[0]> = {
 
 /** Nurse-entered, editable. Never merged with hfiles.in data. */
 export function SchoolRecordsPanel({ student }: { student: Student }) {
-  const role = useAppStore((s) => s.role);
-  const canEdit = role !== "teacher";
+  const canEdit = useCan("editMedical");
   const { school } = student.medicalHistory;
 
   return (
     <Panel
       title="School records"
-      description={canEdit ? "Entered and maintained by school nurses." : "View only — teachers can't edit medical records."}
+      description={canEdit ? "Entered and maintained by school nurses." : "View only — your role can't edit medical records."}
       badge={<SourceBadge source="school" />}
       actions={canEdit && <EditSchoolRecordsDialog student={student} />}
     >

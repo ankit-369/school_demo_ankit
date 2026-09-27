@@ -7,6 +7,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { GatedButton } from "@/components/ui/gated-button";
+import { useCan } from "@/lib/hooks/use-can";
 import { Modal } from "@/components/ui/modal";
 import { useAppStore } from "@/lib/store/app-store";
 import { ADD_STUDENT_DEFAULTS, addStudentSchema, splitList, type AddStudentValues } from "./add-student-schema";
@@ -18,6 +20,7 @@ const FORM_ID = "add-student-form";
 export function AddStudentDialog() {
   const [open, setOpen] = useState(false);
   const addStudent = useAppStore((s) => s.addStudent);
+  const can = useCan("manageStudents");
   const router = useRouter();
   const form = useForm<AddStudentValues>({
     resolver: zodResolver(addStudentSchema),
@@ -61,10 +64,9 @@ export function AddStudentDialog() {
       title="Add student"
       description="Creates a school health record. Families can connect hfiles.in later."
       trigger={
-        <Button>
-          <UserPlus aria-hidden />
+        <GatedButton allowed={can} icon={UserPlus} lockedReason="Your role can't add students">
           Add student
-        </Button>
+        </GatedButton>
       }
       footer={
         <>

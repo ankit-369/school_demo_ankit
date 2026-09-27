@@ -1,3 +1,4 @@
+import { defaultPermissions } from "@/lib/data/permissions";
 import type { Staff } from "@/lib/types/staff";
 
 export const STAFF_IDS = {
@@ -11,7 +12,7 @@ export const STAFF_IDS = {
   registrar: "stf-08",
 } as const;
 
-export const seedStaff: Staff[] = [
+const staffSeeds: Omit<Staff, "permissions">[] = [
   {
     id: STAFF_IDS.principal,
     name: "Dr. Kavita Rao",
@@ -93,3 +94,5 @@ export const seedStaff: Staff[] = [
     status: "active",
   },
 ];
+
+export const seedStaff: Staff[] = staffSeeds.map((s) => ({ ...s, permissions: defaultPermissions(s.role) }));

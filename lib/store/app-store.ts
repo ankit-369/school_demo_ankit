@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { defaultPermissions } from "@/lib/data/permissions";
 import { createSeedData } from "@/lib/data/seed";
 import { createAuditSlice } from "./slices/audit-slice";
 import { createCampsSlice } from "./slices/camps-slice";
@@ -17,7 +18,7 @@ import type { AppState, DemoData } from "./state";
 
 export type { AppState, DemoData } from "./state";
 
-const STORE_VERSION = 2;
+const STORE_VERSION = 3;
 
 type PersistedState = DemoData & Pick<AppState, "role">;
 
@@ -58,10 +59,15 @@ export const useAppStore = create<AppState>()(
         consents: s.consents,
         auditLog: s.auditLog,
       }),
-      // Phase 0 stored only the role; anything older than the current shape reseeds.
       migrate: (persisted, version) => {
-        const role = (persisted as Partial<PersistedState> | undefined)?.role ?? "admin";
-        return version < STORE_VERSION ? { ...createSeedData(), role } : (persisted as PersistedState);
+        const state = persisted as PersistedState;
+        // v0–1 (Phase 0) stored only the role: reseed everything.
+        if (version < 2) return { ...createSeedData(), role: state?.role ?? "admin" };
+        // v2 → v3: staff gained permissions; keep the user's data, add role defaults.
+        if (version < 3) {
+          return { ...state, staff: state.staff.map((s) => ({ ...s, permissions: s.permissions ?? defaultPermissions(s.role) })) };
+        }
+        return state;
       },
     },
   ),

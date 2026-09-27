@@ -10,6 +10,7 @@ import { HfilesSyncBadge } from "@/components/ui/hfiles-sync-badge";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { formatBytes, formatDate } from "@/lib/format";
 import { REPORT_CATEGORY_LABELS } from "@/lib/labels";
+import { useCan } from "@/lib/hooks/use-can";
 import { useAppStore } from "@/lib/store/app-store";
 import type { Report } from "@/lib/types/report";
 import type { Column } from "@/lib/types/table";
@@ -20,6 +21,7 @@ export function ReportsTab() {
   const student = useCurrentStudent();
   const allReports = useAppStore((s) => s.reports);
   const syncReport = useAppStore((s) => s.syncReportToHfiles);
+  const canUpload = useCan("uploadReports");
   const reports = useMemo(
     () => allReports.filter((r) => r.studentId === student.id).sort((a, b) => b.uploadDate.localeCompare(a.uploadDate)),
     [allReports, student.id],
@@ -51,6 +53,7 @@ export function ReportsTab() {
             variant="ghost"
             size="sm"
             className="h-8 text-primary"
+            disabled={!canUpload}
             onClick={() => {
               syncReport(r.id);
               toast.success("Synced to hfiles.in", { description: r.fileName });

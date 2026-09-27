@@ -10,15 +10,17 @@ export type TabNavItem = { href: string; label: string };
 type TabNavProps = {
   items: TabNavItem[];
   label: string;
+  /** Override route matching, e.g. for query-string tabs. */
+  activeHref?: string;
   className?: string;
 };
 
 /** Route-driven tabs with a single underline that glides to the active tab. */
-export function TabNav({ items, label, className }: TabNavProps) {
+export function TabNav({ items, label, activeHref, className }: TabNavProps) {
   const pathname = usePathname();
   const refs = useRef<(HTMLAnchorElement | null)[]>([]);
   const [bar, setBar] = useState<{ left: number; width: number } | null>(null);
-  const activeIndex = items.findIndex((t) => t.href === pathname);
+  const activeIndex = items.findIndex((t) => t.href === (activeHref ?? pathname));
 
   useLayoutEffect(() => {
     const measure = () => {

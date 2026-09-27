@@ -7,6 +7,8 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { GatedButton } from "@/components/ui/gated-button";
+import { useCan } from "@/lib/hooks/use-can";
 import { FormField, fieldA11y } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
@@ -33,6 +35,7 @@ const FORM_ID = "upload-report";
 export function UploadReportDialog({ studentId, studentName }: { studentId: string; studentName: string }) {
   const [open, setOpen] = useState(false);
   const uploadReport = useAppStore((s) => s.uploadReport);
+  const can = useCan("uploadReports");
   const form = useForm<Values>({ resolver: zodResolver(schema), defaultValues: { displayName: "" } });
   const e = form.formState.errors;
   const file = useWatch({ control: form.control, name: "file" });
@@ -57,10 +60,9 @@ export function UploadReportDialog({ studentId, studentName }: { studentId: stri
       title="Upload report"
       description="Reports are saved to the school record and pushed to the family's hfiles.in automatically."
       trigger={
-        <Button>
-          <Upload aria-hidden />
+        <GatedButton allowed={can} icon={Upload} lockedReason="Your role can't upload reports">
           Upload report
-        </Button>
+        </GatedButton>
       }
       footer={
         <>
