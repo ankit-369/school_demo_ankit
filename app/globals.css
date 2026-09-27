@@ -1,0 +1,130 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/*
+ * HealthConnect design tokens.
+ * Raw palette lives in :root; shadcn's semantic variables are mapped onto it
+ * so primitives (dialog, dropdown, sheet…) pick up the same system.
+ */
+:root {
+  --hc-canvas: #ffffff;
+  --hc-surface: #f7f8fa;
+  --hc-ink: #101828;
+  --hc-ink-soft: #475467;
+  --hc-ink-faint: #98a2b3;
+  --hc-line: #e4e7ec;
+  --hc-primary: #1e3a5f;
+  --hc-synced: #0f8b8d;
+  --hc-success: #16a34a;
+  --hc-warning: #d97706;
+  --hc-danger: #dc2626;
+
+  --background: var(--hc-canvas);
+  --foreground: var(--hc-ink);
+  --card: var(--hc-canvas);
+  --card-foreground: var(--hc-ink);
+  --popover: var(--hc-canvas);
+  --popover-foreground: var(--hc-ink);
+  --primary: var(--hc-primary);
+  --primary-foreground: #ffffff;
+  --secondary: var(--hc-surface);
+  --secondary-foreground: var(--hc-ink);
+  --muted: var(--hc-surface);
+  --muted-foreground: var(--hc-ink-soft);
+  --accent: var(--hc-surface);
+  --accent-foreground: var(--hc-ink);
+  --destructive: var(--hc-danger);
+  --border: var(--hc-line);
+  --input: var(--hc-line);
+  --ring: var(--hc-primary);
+  --radius: 0.625rem;
+
+  --bottom-nav-height: 4rem;
+}
+
+@theme inline {
+  /* HealthConnect palette */
+  --color-canvas: var(--hc-canvas);
+  --color-surface: var(--hc-surface);
+  --color-ink: var(--hc-ink);
+  --color-ink-soft: var(--hc-ink-soft);
+  --color-ink-faint: var(--hc-ink-faint);
+  --color-line: var(--hc-line);
+  --color-synced: var(--hc-synced);
+  --color-success: var(--hc-success);
+  --color-warning: var(--hc-warning);
+  --color-danger: var(--hc-danger);
+  /* Darker text shades so status labels stay legible on their tinted pills */
+  --color-success-ink: color-mix(in oklab, var(--hc-success) 70%, black);
+  --color-warning-ink: color-mix(in oklab, var(--hc-warning) 65%, black);
+  --color-danger-ink: color-mix(in oklab, var(--hc-danger) 75%, black);
+  --color-synced-ink: color-mix(in oklab, var(--hc-synced) 75%, black);
+
+  /* shadcn semantic mapping */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+
+  /* Reserved for genuinely distinct surfaces: modals, menus, table panels */
+  --shadow-soft: 0 1px 2px rgb(16 24 40 / 0.04), 0 4px 12px rgb(16 24 40 / 0.06);
+  --shadow-overlay: 0 4px 8px rgb(16 24 40 / 0.06), 0 16px 32px rgb(16 24 40 / 0.12);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply font-sans antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-canvas text-ink text-[15px] leading-6;
+  }
+  :focus-visible {
+    outline: 2px solid var(--hc-primary);
+    outline-offset: 2px;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
