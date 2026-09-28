@@ -6,10 +6,12 @@ import { defaultPermissions } from "@/lib/data/permissions";
 import { DEFAULT_TEMPLATES } from "@/lib/data/templates";
 import { DEFAULT_SCHOOL as DEFAULT_SCHOOL_FALLBACK } from "./slices/settings-slice";
 import { createSeedData } from "@/lib/data/seed";
+import { seedDoctorLinks } from "@/lib/data/seed/doctor-links";
 import { createAcademicSlice } from "./slices/academic-slice";
 import { createAuditSlice } from "./slices/audit-slice";
 import { createCampsSlice } from "./slices/camps-slice";
 import { createConsentSlice } from "./slices/consent-slice";
+import { createDoctorLinksSlice } from "./slices/doctor-links-slice";
 import { createHfilesSlice } from "./slices/hfiles-slice";
 import { createNotesSlice } from "./slices/notes-slice";
 import { createSettingsSlice } from "./slices/settings-slice";
@@ -22,7 +24,7 @@ import type { AppState, DemoData } from "./state";
 
 export type { AppState, DemoData } from "./state";
 
-const STORE_VERSION = 4;
+const STORE_VERSION = 5;
 
 type PersistedState = DemoData & Pick<AppState, "role" | "academicYear" | "school" | "templates">;
 
@@ -45,6 +47,7 @@ export const useAppStore = create<AppState>()(
       ...createNotificationsSlice(...a),
       ...createConsentSlice(...a),
       ...createHfilesSlice(...a),
+      ...createDoctorLinksSlice(...a),
       ...createSettingsSlice(...a),
       ...createAuditSlice(...a),
       ...createSeedData(),
@@ -67,6 +70,7 @@ export const useAppStore = create<AppState>()(
         notifications: s.notifications,
         consents: s.consents,
         auditLog: s.auditLog,
+        doctorLinks: s.doctorLinks,
       }),
       migrate: (persisted, version) => {
         let state = persisted as PersistedState;
@@ -79,6 +83,15 @@ export const useAppStore = create<AppState>()(
         // v3 → v4: added school profile and notification templates.
         if (version < 4) {
           state = { ...state, school: state.school ?? DEFAULT_SCHOOL_FALLBACK, templates: state.templates ?? DEFAULT_TEMPLATES };
+        }
+        // v4 → v5: permission keys added since a user's data was saved (manageSettings,
+        // logIncidents) default from the role; demo doctor links are added.
+        if (version < 5) {
+          state = {
+            ...state,
+            staff: state.staff.map((s) => ({ ...s, permissions: { ...defaultPermissions(s.role), ...s.permissions } })),
+            doctorLinks: state.doctorLinks ?? seedDoctorLinks,
+          };
         }
         return state;
       },

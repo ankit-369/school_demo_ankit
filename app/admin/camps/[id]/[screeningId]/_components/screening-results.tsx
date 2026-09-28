@@ -15,6 +15,7 @@ import { standardsLabel } from "@/lib/selectors/camps";
 import { isScreened, rowClasses, screeningRows } from "@/lib/selectors/screening-results";
 import { useAppStore } from "@/lib/store/app-store";
 import { GRADES } from "@/lib/types/grade";
+import { DoctorLinkDialog } from "./doctor-link-dialog";
 import { ExportCsvButton } from "./export-csv-button";
 import { ResultsTable } from "./results-table";
 import { SendToHfilesDialog } from "./send-to-hfiles-dialog";
@@ -55,6 +56,7 @@ export function ScreeningResults({ campId, screeningId, classFilter }: Screening
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <DoctorLinkDialog camp={camp} screening={screening} />
           <ExportCsvButton camp={camp} screening={screening} rows={rows} scope={active ?? "all-classes"} />
           <SendToHfilesDialog camp={camp} screening={screening} rows={rows} />
         </div>

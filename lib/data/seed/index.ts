@@ -3,6 +3,7 @@ import { pushReportToHfiles } from "../report-sync";
 import { seedAuditLog } from "./audit-log";
 import { buildSeedCamps } from "./camps";
 import { buildSeedConsent } from "./consent";
+import { seedDoctorLinks } from "./doctor-links";
 import { seedNotes } from "./notes";
 import { seedNotifications } from "./notifications";
 import { seedReports } from "./reports";
@@ -32,5 +33,6 @@ export function createSeedData(): DemoData {
     notifications: seedNotifications,
     consents: buildSeedConsent(students),
     auditLog: seedAuditLog,
+    doctorLinks: seedDoctorLinks,
   });
 }

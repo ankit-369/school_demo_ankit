@@ -3,6 +3,7 @@ import type { AuditLogEntry } from "@/lib/types/audit-log";
 import type { Camp } from "@/lib/types/camp";
 import type { ClinicalNote } from "@/lib/types/clinical-note";
 import type { ConsentRecord } from "@/lib/types/consent";
+import type { DoctorLink } from "@/lib/types/doctor-link";
 import type { Notification } from "@/lib/types/notification";
 import type { Report } from "@/lib/types/report";
 import type { Staff } from "@/lib/types/staff";
@@ -11,6 +12,7 @@ import type { AcademicSlice } from "./slices/academic-slice";
 import type { AuditSlice } from "./slices/audit-slice";
 import type { CampsSlice } from "./slices/camps-slice";
 import type { ConsentSlice } from "./slices/consent-slice";
+import type { DoctorLinksSlice } from "./slices/doctor-links-slice";
 import type { HfilesSlice } from "./slices/hfiles-slice";
 import type { NotesSlice } from "./slices/notes-slice";
 import type { SettingsSlice } from "./slices/settings-slice";
@@ -30,6 +32,7 @@ export type DemoData = {
   notifications: Notification[];
   consents: ConsentRecord[];
   auditLog: AuditLogEntry[];
+  doctorLinks: DoctorLink[];
 };
 
 export type AppState = UiSlice &
@@ -42,6 +45,7 @@ export type AppState = UiSlice &
   NotificationsSlice &
   ConsentSlice &
   HfilesSlice &
+  DoctorLinksSlice &
   SettingsSlice &
   AuditSlice;
 

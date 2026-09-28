@@ -8,6 +8,7 @@ export const PERMISSIONS: { key: PermissionKey; label: string; description: stri
   { key: "viewMedical", label: "View medical records", description: "Allergies, conditions and hfiles.in data", group: "Health records" },
   { key: "editMedical", label: "Edit school medical records", description: "Allergies, conditions, surgeries and nurse notes", group: "Health records" },
   { key: "addNotes", label: "Add clinical notes", description: "Record medical-room visits and incidents", group: "Health records" },
+  { key: "logIncidents", label: "Log classroom incidents", description: "Quick incident reports, saved to the student's notes for the nurse", group: "Health records" },
   { key: "uploadReports", label: "Upload reports", description: "Saved to the school record and pushed to hfiles.in", group: "Health records" },
   { key: "notifyGuardians", label: "Message guardians", description: "Send SMS or WhatsApp updates with a clinical note", group: "Communication" },
   { key: "manageCamps", label: "Schedule health camps", description: "Create camps and add screenings", group: "Health camps" },
@@ -26,14 +27,14 @@ function grant(...keys: PermissionKey[]): Permissions {
 }
 
 const ALL = PERMISSIONS.map((p) => p.key);
-const CLINICAL: PermissionKey[] = ["viewMedical", "editMedical", "addNotes", "uploadReports", "notifyGuardians", "recordResults", "sendToHfiles"];
+const CLINICAL: PermissionKey[] = ["viewMedical", "editMedical", "addNotes", "logIncidents", "uploadReports", "notifyGuardians", "recordResults", "sendToHfiles"];
 
 /** Starting permissions for each staff role (and the non-staff "doctor" viewing role). */
 export const ROLE_DEFAULT_PERMISSIONS: Record<StaffRole | Extract<Role, "doctor">, Permissions> = {
   principal: grant(...ALL),
   admin: grant(...ALL),
   nurse: grant(...CLINICAL),
-  teacher: grant("viewMedical"),
+  teacher: grant("viewMedical", "logIncidents"),
   registrar: grant("manageStudents", "exportData"),
   doctor: grant("viewMedical", "editMedical", "addNotes", "uploadReports", "recordResults", "sendToHfiles"),
 };

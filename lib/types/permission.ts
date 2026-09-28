@@ -2,6 +2,7 @@ export const PERMISSION_KEYS = [
   "viewMedical",
   "editMedical",
   "addNotes",
+  "logIncidents",
   "uploadReports",
   "notifyGuardians",
   "manageCamps",

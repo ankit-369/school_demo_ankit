@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CalendarX } from "lucide-react";
+import { CalendarX, Smartphone } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -48,7 +48,15 @@ export function CampDetail({ id }: { id: string }) {
             {formatDateRange(camp.startDate, camp.endDate)} · Classes {standardsLabel(campStandards(camp))} · {campDoctors(camp).join(", ")}
           </p>
         </div>
-        <AddScreeningDialog camp={camp} />
+        <div className="flex flex-wrap gap-2">
+          <Button asChild variant="outline" className="border-line">
+            <Link href={`/nurse/camp/${camp.id}/roster`}>
+              <Smartphone aria-hidden />
+              Open camp-day mode
+            </Link>
+          </Button>
+          <AddScreeningDialog camp={camp} />
+        </div>
       </header>
       <KpiBand className="md:grid-cols-4 xl:grid-cols-4">
         <KpiTile label="Screenings" value={camp.screenings.length} />
