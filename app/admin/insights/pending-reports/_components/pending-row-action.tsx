@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { formatRelative } from "@/lib/format";
 import type { PendingItem } from "@/lib/selectors/insights-reports";
 import { useAppStore } from "@/lib/store/app-store";
-import { reminderMessage } from "./reminder-message";
+import { reminderMessage } from "@/lib/notifications/reminder-message";
 
 type PendingRowActionProps = { item: PendingItem; canNotify: boolean; canSync: boolean };
 
@@ -14,6 +14,8 @@ type PendingRowActionProps = { item: PendingItem; canNotify: boolean; canSync: b
 export function PendingRowAction({ item, canNotify, canSync }: PendingRowActionProps) {
   const send = useAppStore((s) => s.sendNotification);
   const sync = useAppStore((s) => s.syncReportToHfiles);
+  const template = useAppStore((s) => s.templates.pendingReportReminder);
+  const schoolName = useAppStore((s) => s.school.name);
 
   if (item.kind === "upload") {
     return (
@@ -49,7 +51,7 @@ export function PendingRowAction({ item, canNotify, canSync }: PendingRowActionP
         disabled={!canNotify}
         title={canNotify ? undefined : "Your role can't message guardians"}
         onClick={() => {
-          send({ studentId: item.student.id, type: "report-reminder", channel: "whatsapp", message: reminderMessage(item), refId: item.id });
+          send({ studentId: item.student.id, type: "report-reminder", channel: "whatsapp", message: reminderMessage(item, template, schoolName), refId: item.id });
           toast.success(`Reminder sent to ${item.student.guardian.name}`, { description: "WhatsApp" });
         }}
       >

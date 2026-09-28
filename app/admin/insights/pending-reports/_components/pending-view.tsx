@@ -15,7 +15,7 @@ import { useAppStore } from "@/lib/store/app-store";
 import { classKey, type Grade } from "@/lib/types/grade";
 import type { Column } from "@/lib/types/table";
 import { PendingRowAction } from "./pending-row-action";
-import { reminderMessage } from "./reminder-message";
+import { reminderMessage } from "@/lib/notifications/reminder-message";
 
 export function PendingView({ grade }: { grade: Grade | null }) {
   const students = useAppStore((s) => s.students);
@@ -23,13 +23,15 @@ export function PendingView({ grade }: { grade: Grade | null }) {
   const reports = useAppStore((s) => s.reports);
   const notifications = useAppStore((s) => s.notifications);
   const send = useAppStore((s) => s.sendNotification);
+  const template = useAppStore((s) => s.templates.pendingReportReminder);
+  const schoolName = useAppStore((s) => s.school.name);
   const canNotify = useCan("notifyGuardians");
   const canSync = useCan("uploadReports");
   const items = useMemo(() => pendingItems({ students, camps, reports }, notifications, grade), [students, camps, reports, notifications, grade]);
   const unreminded = items.filter((i) => i.kind === "screening" && !i.remindedAt);
 
   function remindAll() {
-    unreminded.forEach((i) => send({ studentId: i.student.id, type: "report-reminder", channel: "whatsapp", message: reminderMessage(i), refId: i.id }));
+    unreminded.forEach((i) => send({ studentId: i.student.id, type: "report-reminder", channel: "whatsapp", message: reminderMessage(i, template, schoolName), refId: i.id }));
     toast.success(`Sent ${pluralize(unreminded.length, "reminder")}`, { description: "Guardians notified on WhatsApp" });
   }
 

@@ -13,6 +13,7 @@ import type { CampsSlice } from "./slices/camps-slice";
 import type { ConsentSlice } from "./slices/consent-slice";
 import type { HfilesSlice } from "./slices/hfiles-slice";
 import type { NotesSlice } from "./slices/notes-slice";
+import type { SettingsSlice } from "./slices/settings-slice";
 import type { NotificationsSlice } from "./slices/notifications-slice";
 import type { ReportsSlice } from "./slices/reports-slice";
 import type { StaffSlice } from "./slices/staff-slice";
@@ -41,6 +42,7 @@ export type AppState = UiSlice &
   NotificationsSlice &
   ConsentSlice &
   HfilesSlice &
+  SettingsSlice &
   AuditSlice;
 
 export type SliceCreator<T> = StateCreator<AppState, [["zustand/persist", unknown]], [], T>;

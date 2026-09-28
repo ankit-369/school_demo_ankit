@@ -10,6 +10,7 @@ export const PERMISSION_KEYS = [
   "exportData",
   "manageStudents",
   "manageStaff",
+  "manageSettings",
 ] as const;
 
 export type PermissionKey = (typeof PERMISSION_KEYS)[number];

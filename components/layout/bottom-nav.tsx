@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { ADMIN_NAV, isNavActive } from "./nav-items";
+import { PRIMARY_NAV, isNavActive } from "./nav-items";
 
 export function BottomNav() {
   const pathname = usePathname();
@@ -13,7 +13,7 @@ export function BottomNav() {
       className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-canvas/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
     >
       <ul className="grid h-(--bottom-nav-height) grid-cols-5">
-        {ADMIN_NAV.map(({ href, label, shortLabel, icon: Icon }) => {
+        {PRIMARY_NAV.map(({ href, label, shortLabel, icon: Icon }) => {
           const active = isNavActive(pathname, href);
           return (
             <li key={href} className="flex">

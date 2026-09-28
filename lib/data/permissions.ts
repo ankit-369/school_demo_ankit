@@ -16,6 +16,7 @@ export const PERMISSIONS: { key: PermissionKey; label: string; description: stri
   { key: "exportData", label: "Export data", description: "Download results and directories as CSV", group: "Administration" },
   { key: "manageStudents", label: "Add and edit students", description: "Admissions, class changes and promotions", group: "Administration" },
   { key: "manageStaff", label: "Manage staff access", description: "Add faculty and change these permissions", group: "Administration" },
+  { key: "manageSettings", label: "Manage school settings", description: "School profile, notification templates and integrations", group: "Administration" },
 ];
 
 export const PERMISSION_GROUPS: PermissionGroup[] = ["Health records", "Health camps", "Communication", "Administration"];

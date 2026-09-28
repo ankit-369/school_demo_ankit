@@ -1,6 +1,6 @@
 import type { CampPhase } from "@/lib/types/camp";
 import type { ClinicalNoteType } from "@/lib/types/clinical-note";
-import type { NotificationChannel, NotificationStatus } from "@/lib/types/notification";
+import type { NotificationChannel, NotificationStatus, NotificationType } from "@/lib/types/notification";
 import type { ReportCategory } from "@/lib/types/report";
 import type { ScreeningResultStatus, ScreeningType } from "@/lib/types/screening";
 import type { StatusTone } from "@/lib/types/status";
@@ -82,4 +82,13 @@ export const STAFF_STATUS: Record<StaffStatus, ToneLabel> = {
   active: { tone: "success", label: "Active" },
   "on-leave": { tone: "warning", label: "On leave" },
   inactive: { tone: "neutral", label: "Inactive" },
+};
+
+export const NOTIFICATION_TYPE_LABELS: Record<NotificationType, string> = {
+  "clinical-note": "Clinical note",
+  "screening-result": "Screening result",
+  "report-shared": "Report shared",
+  "camp-reminder": "Camp reminder",
+  "consent-request": "Consent request",
+  "report-reminder": "Pending report reminder",
 };
