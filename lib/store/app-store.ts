@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { defaultPermissions } from "@/lib/data/permissions";
 import { createSeedData } from "@/lib/data/seed";
+import { createAcademicSlice } from "./slices/academic-slice";
 import { createAuditSlice } from "./slices/audit-slice";
 import { createCampsSlice } from "./slices/camps-slice";
 import { createConsentSlice } from "./slices/consent-slice";
@@ -20,7 +21,7 @@ export type { AppState, DemoData } from "./state";
 
 const STORE_VERSION = 3;
 
-type PersistedState = DemoData & Pick<AppState, "role">;
+type PersistedState = DemoData & Pick<AppState, "role" | "academicYear">;
 
 /**
  * The app's single mock "database", persisted to localStorage.
@@ -32,6 +33,7 @@ export const useAppStore = create<AppState>()(
   persist(
     (...a) => ({
       ...createUiSlice(...a),
+      ...createAcademicSlice(...a),
       ...createStudentsSlice(...a),
       ...createStaffSlice(...a),
       ...createCampsSlice(...a),
@@ -50,6 +52,7 @@ export const useAppStore = create<AppState>()(
       skipHydration: true,
       partialize: (s): PersistedState => ({
         role: s.role,
+        academicYear: s.academicYear,
         students: s.students,
         staff: s.staff,
         camps: s.camps,

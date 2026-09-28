@@ -16,7 +16,7 @@ import { NativeSelect } from "@/components/ui/native-select";
 import { REPORT_CATEGORY_LABELS } from "@/lib/labels";
 import { useAppStore } from "@/lib/store/app-store";
 import type { ReportCategory } from "@/lib/types/report";
-import { FilePicker } from "./file-picker";
+import { FilePicker } from "@/components/ui/file-picker";
 
 const MAX_BYTES = 10 * 1024 * 1024;
 const CATEGORIES = Object.keys(REPORT_CATEGORY_LABELS) as [ReportCategory, ...ReportCategory[]];

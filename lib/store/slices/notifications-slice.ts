@@ -2,7 +2,7 @@ import type { Notification } from "@/lib/types/notification";
 import { newId, nowIso } from "../helpers";
 import type { SliceCreator } from "../state";
 
-export type SendNotificationInput = Pick<Notification, "studentId" | "type" | "message" | "channel"> & {
+export type SendNotificationInput = Pick<Notification, "studentId" | "type" | "message" | "channel" | "refId"> & {
   /** Defaults to now; pass to tie the notification to another record's timestamp. */
   createdAt?: string;
 };

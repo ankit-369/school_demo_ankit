@@ -3,7 +3,8 @@ export type NotificationType =
   | "screening-result"
   | "report-shared"
   | "camp-reminder"
-  | "consent-request";
+  | "consent-request"
+  | "report-reminder";
 
 export type NotificationChannel = "sms" | "whatsapp";
 
@@ -17,4 +18,6 @@ export type Notification = {
   channel: NotificationChannel;
   status: NotificationStatus;
   createdAt: string;
+  /** Id of the record this is about (e.g. a pending item), so the UI can show "reminded". */
+  refId?: string;
 };

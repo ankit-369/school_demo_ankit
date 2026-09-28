@@ -1,4 +1,5 @@
 import type { Camp } from "@/lib/types/camp";
+import { campPhase } from "./camps";
 import type { Screening, ScreeningResult } from "@/lib/types/screening";
 import type { Student } from "@/lib/types/student";
 
@@ -34,13 +35,17 @@ export type StudentScreeningRow = {
   result?: ScreeningResult;
 };
 
-/** Every screening this student was (or will be) part of, newest first. */
+/**
+ * Every screening this student has a result in, plus ones they're targeted by in
+ * camps that haven't finished. (Completed camps only show real results, so a
+ * promoted student isn't listed as "not screened" for a grade they weren't in.)
+ */
 export function studentScreenings(student: Student, camps: Camp[]): StudentScreeningRow[] {
   return camps
     .flatMap((camp) =>
       camp.screenings.flatMap((screening) => {
         const result = screening.results.find((r) => r.studentId === student.id);
-        const targeted = screening.targetStandards.includes(student.grade);
+        const targeted = screening.targetStandards.includes(student.grade) && campPhase(camp) !== "completed";
         return result || targeted ? [{ camp, screening, result }] : [];
       }),
     )

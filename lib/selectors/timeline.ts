@@ -25,7 +25,7 @@ export function studentTimeline(student: Student, { camps, notes, reports }: Inp
   const items: TimelineItem[] = [];
 
   notes
-    .filter((n) => n.studentId === student.id)
+    .filter((n) => n.studentId === student.id && !n.archivedYear)
     .forEach((n) =>
       items.push({
         id: n.id,
@@ -38,7 +38,7 @@ export function studentTimeline(student: Student, { camps, notes, reports }: Inp
     );
 
   studentScreenings(student, camps)
-    .filter((row) => row.result && row.result.status !== "pending")
+    .filter((row) => row.result && row.result.status !== "pending" && !row.result.archivedYear)
     .forEach(({ camp, screening, result }) =>
       items.push({
         id: `${screening.id}-${student.id}`,
@@ -52,7 +52,7 @@ export function studentTimeline(student: Student, { camps, notes, reports }: Inp
     );
 
   reports
-    .filter((r) => r.studentId === student.id)
+    .filter((r) => r.studentId === student.id && !r.archivedYear)
     .forEach((r) =>
       items.push({
         id: r.id,

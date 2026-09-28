@@ -22,6 +22,8 @@ export type LabReport = {
   summary: string;
   /** Set when the entry was auto-pushed from a school report upload. */
   reportId?: string;
+  /** When the school pushed this entry to hfiles.in (screening results). */
+  sharedAt?: string;
 };
 
 /** Entered and maintained by school staff. */

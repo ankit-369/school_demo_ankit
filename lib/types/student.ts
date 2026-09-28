@@ -11,7 +11,18 @@ export type House = "Ganga" | "Yamuna" | "Kaveri" | "Narmada";
 
 export type Transport = "school-bus" | "private" | "walker";
 
-export type StudentStatus = "active" | "graduated" | "transferred";
+export type StudentStatus = "active" | "graduated" | "transferred" | "exited";
+
+export type YearOutcome = "promoted" | "retained" | "graduated" | "transferred" | "exited";
+
+/** One closed academic year on a student's record. */
+export type YearRecord = {
+  year: string;
+  grade: Grade;
+  division: Division;
+  outcome: YearOutcome;
+  closedAt: string;
+};
 
 export type Guardian = {
   name: string;
@@ -43,5 +54,7 @@ export type Student = {
   transport: Transport;
   guardian: Guardian;
   status: StudentStatus;
+  /** Previous academic years, oldest first. */
+  history?: YearRecord[];
   medicalHistory: MedicalHistory;
 };

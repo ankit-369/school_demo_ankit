@@ -1,4 +1,5 @@
 import { Send } from "lucide-react";
+import { ArchivedBadge } from "@/components/ui/archive-toggle";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { formatDateTime } from "@/lib/format";
 import { CHANNEL_LABELS, NOTE_TYPE_LABELS, NOTIFICATION_STATUS } from "@/lib/labels";
@@ -19,6 +20,7 @@ export function NoteCard({ note, notification }: NoteCardProps) {
           {NOTE_TYPE_LABELS[note.type]}
         </span>
         {note.urgent && <StatusBadge tone="danger" label="Urgent" />}
+        {note.archivedYear && <ArchivedBadge year={note.archivedYear} />}
         <span className="ml-auto text-[13px] text-ink-faint">
           <time dateTime={note.dateTime}>{formatDateTime(note.dateTime)}</time> · {note.staffName}
         </span>

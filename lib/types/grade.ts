@@ -17,3 +17,8 @@ export function classKey(grade: Grade, division: Division): ClassKey {
 export function gradeLabel(grade: Grade): string {
   return grade === "JKG" || grade === "SKG" ? grade : `Grade ${grade}`;
 }
+
+/** Validates a query-string value like "8" or "SKG"; anything else → null. */
+export function parseGrade(value: unknown): Grade | null {
+  return typeof value === "string" && (GRADES as readonly string[]).includes(value) ? (value as Grade) : null;
+}

@@ -67,6 +67,7 @@ export const createHfilesSlice: SliceCreator<HfilesSlice> = (set, get) => ({
           date: screening.date,
           lab: screening.leadDoctor,
           summary: result?.notes || "Screening completed at school.",
+          sharedAt: now,
         };
         const { hfiles } = st.medicalHistory;
         const labReports = [entry, ...hfiles.labReports.filter((l) => l.id !== entryId)];

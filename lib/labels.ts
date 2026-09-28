@@ -34,6 +34,7 @@ export const STUDENT_STATUS: Record<StudentStatus, ToneLabel> = {
   active: { tone: "success", label: "Active" },
   graduated: { tone: "neutral", label: "Graduated" },
   transferred: { tone: "warning", label: "Transferred" },
+  exited: { tone: "neutral", label: "Exited" },
 };
 
 export const HEARING_LABELS: Record<HearingStatus, string> = {

@@ -7,6 +7,7 @@ import type { Notification } from "@/lib/types/notification";
 import type { Report } from "@/lib/types/report";
 import type { Staff } from "@/lib/types/staff";
 import type { Student } from "@/lib/types/student";
+import type { AcademicSlice } from "./slices/academic-slice";
 import type { AuditSlice } from "./slices/audit-slice";
 import type { CampsSlice } from "./slices/camps-slice";
 import type { ConsentSlice } from "./slices/consent-slice";
@@ -31,6 +32,7 @@ export type DemoData = {
 };
 
 export type AppState = UiSlice &
+  AcademicSlice &
   StudentsSlice &
   StaffSlice &
   CampsSlice &

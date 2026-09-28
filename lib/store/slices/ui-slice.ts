@@ -13,5 +13,5 @@ export type UiSlice = {
 export const createUiSlice: SliceCreator<UiSlice> = (set) => ({
   role: "admin",
   setRole: (role) => set({ role }),
-  resetDemoData: () => set(createSeedData()),
+  resetDemoData: () => set({ ...createSeedData(), academicYear: "2026-27" }),
 });

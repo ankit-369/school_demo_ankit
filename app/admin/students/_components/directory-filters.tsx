@@ -52,6 +52,7 @@ export function DirectoryFilters({ value, onChange, healthTags }: DirectoryFilte
             { value: "active", label: "Active" },
             { value: "graduated", label: "Graduated" },
             { value: "transferred", label: "Transferred" },
+            { value: "exited", label: "Exited" },
           ]}
           className="lg:w-36"
         />

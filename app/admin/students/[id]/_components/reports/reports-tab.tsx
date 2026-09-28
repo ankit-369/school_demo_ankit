@@ -1,7 +1,8 @@
 "use client";
 
 import { FileText, FolderOpen, RefreshCw } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { ArchivedBadge, ArchiveToggle } from "@/components/ui/archive-toggle";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -22,10 +23,13 @@ export function ReportsTab() {
   const allReports = useAppStore((s) => s.reports);
   const syncReport = useAppStore((s) => s.syncReportToHfiles);
   const canUpload = useCan("uploadReports");
-  const reports = useMemo(
+  const [showArchived, setShowArchived] = useState(false);
+  const mine = useMemo(
     () => allReports.filter((r) => r.studentId === student.id).sort((a, b) => b.uploadDate.localeCompare(a.uploadDate)),
     [allReports, student.id],
   );
+  const archivedCount = mine.filter((r) => r.archivedYear).length;
+  const reports = showArchived ? mine : mine.filter((r) => !r.archivedYear);
 
   const columns: Column<Report>[] = [
     {
@@ -35,6 +39,7 @@ export function ReportsTab() {
         <span className="inline-flex items-center gap-2 font-medium">
           <FileText aria-hidden className="size-4 shrink-0 text-ink-faint" />
           {r.fileName}
+          {r.archivedYear && <ArchivedBadge year={r.archivedYear} />}
         </span>
       ),
     },
@@ -69,6 +74,7 @@ export function ReportsTab() {
   return (
     <div className="flex flex-col gap-4">
       <SectionHeading title="Reports" actions={<UploadReportDialog studentId={student.id} studentName={student.name} />} />
+      <ArchiveToggle count={archivedCount} shown={showArchived} onToggle={() => setShowArchived((v) => !v)} className="self-start" />
       <DataTable
         caption={`Reports for ${student.name}`}
         columns={columns}

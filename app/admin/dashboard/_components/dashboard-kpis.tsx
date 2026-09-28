@@ -20,8 +20,8 @@ export function DashboardKpis({ kpis, grade }: DashboardKpisProps) {
       <KpiTile href={href("students")} label="Total students" value={nf.format(kpis.totalStudents)} hint={scope} />
       <KpiTile href={href("camps")} label="Health camps" value={nf.format(kpis.totalCamps)} hint="All time" />
       <KpiTile href={href("screened")} label="Screened this year" value={nf.format(kpis.screenedThisYear)} hint="Distinct students" />
-      <KpiTile href={href("reports-shared")} label="Reports shared" value={nf.format(kpis.reportsShared)} hint="With families" />
-      <KpiTile href={href("reports-pending")} label="Pending reports" value={nf.format(kpis.pendingReports)} hint="Awaiting results or sync" />
+      <KpiTile href={href("reports-shared")} label="Reports shared" value={nf.format(kpis.reportsShared)} hint="Via hfiles.in" />
+      <KpiTile href={href("pending-reports")} label="Pending reports" value={nf.format(kpis.pendingReports)} hint="Results or uploads outstanding" />
       <KpiTile href={href("conditions")} label="Medical conditions" value={nf.format(kpis.medicalConditions)} hint="Students with a flag" />
     </KpiBand>
   );
