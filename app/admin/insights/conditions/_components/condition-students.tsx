@@ -15,7 +15,7 @@ function StudentRow({ s, hfilesOnly }: { s: Student; hfilesOnly?: boolean }) {
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <StudentAvatar name={s.name} photoUrl={s.photoUrl} size="md" />
         <div className="min-w-0">
-          <Link href={`/admin/students/${s.id}/medical-history`} className="rounded-sm font-medium text-ink hover:text-primary hover:underline">
+          <Link href={`/admin/students/${s.id}/medical-history`} className="tap-target rounded-sm font-medium text-ink hover:text-primary hover:underline">
             {s.name}
           </Link>
           <p className="text-[13px] text-ink-faint">
@@ -26,7 +26,7 @@ function StudentRow({ s, hfilesOnly }: { s: Student; hfilesOnly?: boolean }) {
       </div>
       <div className="flex flex-wrap items-center gap-2 sm:w-80 sm:justify-end">
         {hfilesOnly ? <SourceBadge source="hfiles" /> : <HealthFlags allergies={school.allergies} conditions={school.conditions} max={3} />}
-        <a href={`tel:${s.guardian.phone.replace(/\s/g, "")}`} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-line px-2.5 text-[13px] font-medium text-ink hover:bg-surface">
+        <a href={`tel:${s.guardian.phone.replace(/\s/g, "")}`} className="inline-flex min-h-9 pointer-coarse:min-h-11 items-center gap-1.5 rounded-lg border border-line px-2.5 text-[13px] font-medium text-ink hover:bg-surface">
           <Phone aria-hidden className="size-3.5 text-ink-faint" />
           {s.guardian.name.split(" ")[0]}
         </a>

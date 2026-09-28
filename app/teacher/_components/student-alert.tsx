@@ -18,7 +18,7 @@ export function StudentAlert({ studentId }: { studentId: string }) {
   const student = students.find((s) => s.id === studentId);
 
   if (!student) {
-    return <EmptyState icon={UserX} title="Not in your class" description="You can only see action cards for your own students." action={<Link href="/teacher/class" className="text-sm font-medium text-primary">Back to my class</Link>} />;
+    return <EmptyState icon={UserX} title="Not in your class" description="You can only see action cards for your own students." action={<Link href="/teacher/class" className="tap-target text-sm font-medium text-primary">Back to my class</Link>} />;
   }
 
   const { school, hfiles } = student.medicalHistory;
@@ -33,7 +33,7 @@ export function StudentAlert({ studentId }: { studentId: string }) {
 
   return (
     <div className="flex flex-col gap-5">
-      <Link href="/teacher/class" className="inline-flex w-fit items-center gap-1 rounded-sm text-sm font-medium text-ink-soft hover:text-ink">
+      <Link href="/teacher/class" className="inline-flex w-fit items-center gap-1 rounded-sm text-sm font-medium text-ink-soft hover:text-ink pointer-coarse:min-h-11">
         <ChevronLeft aria-hidden className="size-4" />
         My class
       </Link>

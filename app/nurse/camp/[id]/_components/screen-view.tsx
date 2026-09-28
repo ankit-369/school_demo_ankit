@@ -34,7 +34,7 @@ export function ScreenView({ campId, studentId, stationId }: ScreenViewProps) {
   }, [nextHref, router]);
 
   if (!camp || !station || !row) {
-    return <EmptyState icon={UserX} title="Not on this roster" description="This student isn't part of this station." action={<Link href="/nurse" className="text-sm font-medium text-primary">All camps</Link>} />;
+    return <EmptyState icon={UserX} title="Not on this roster" description="This student isn't on this station's roster. Go back and pick someone from the list." action={<Link href="/nurse" className="tap-target text-sm font-medium text-primary">All camps</Link>} />;
   }
 
   const summaryHref = stationHref(camp.id, "summary", station.id);
@@ -58,7 +58,7 @@ export function ScreenView({ campId, studentId, stationId }: ScreenViewProps) {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between gap-3">
-        <Link href={stationHref(camp.id, "roster", station.id)} className="inline-flex items-center gap-1 rounded-sm text-sm font-medium text-ink-soft hover:text-ink">
+        <Link href={stationHref(camp.id, "roster", station.id)} className="inline-flex items-center gap-1 rounded-sm text-sm font-medium text-ink-soft hover:text-ink pointer-coarse:min-h-11">
           <ChevronLeft aria-hidden className="size-4" />
           Roster
         </Link>

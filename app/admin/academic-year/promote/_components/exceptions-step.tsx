@@ -29,7 +29,7 @@ export function ExceptionsStep({ roster, plan, onChange }: ExceptionsStepProps) 
         <div className="relative sm:w-64">
           <label htmlFor="exc-search" className="sr-only">Find a student</label>
           <Search aria-hidden className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-ink-faint" />
-          <input id="exc-search" type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Find a student" className="h-10 w-full rounded-lg border border-input bg-canvas pr-3 pl-9 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30" />
+          <input id="exc-search" type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Find a student" className="h-10 pointer-coarse:h-11 pointer-coarse:text-base w-full rounded-lg border border-input bg-canvas pr-3 pl-9 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30" />
         </div>
       </div>
       {roster.map((c) => {

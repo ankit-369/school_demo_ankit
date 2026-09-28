@@ -39,6 +39,7 @@ export function SendToHfilesDialog({ camp, screening, rows }: SendToHfilesDialog
       open={open}
       onOpenChange={setOpen}
       size="sm"
+      mobile="dialog"
       title="Send results to hfiles.in?"
       description={`${SCREENING_TYPE_LABELS[screening.type]} · ${camp.name}`}
       trigger={

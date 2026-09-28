@@ -21,7 +21,7 @@ export function NotificationsFilters({ value, onChange }: NotificationsFiltersPr
           value={value.query}
           onChange={set("query")}
           placeholder="Student, HFID or message"
-          className="h-10 w-full rounded-lg border border-input bg-canvas pr-3 pl-9 text-sm text-ink outline-none placeholder:text-ink-faint focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
+          className="h-10 pointer-coarse:h-11 pointer-coarse:text-base w-full rounded-lg border border-input bg-canvas pr-3 pl-9 text-sm text-ink outline-none placeholder:text-ink-faint focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
         />
       </div>
       <div className="grid grid-cols-3 gap-3 lg:flex lg:flex-1">

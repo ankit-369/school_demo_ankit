@@ -29,6 +29,7 @@ const columns: Column<SharedItem>[] = [
   {
     id: "student",
     header: "Student",
+    mobile: "title",
     cell: ({ student: s }) => (
       <span className="flex flex-col">
         <Link href={`/admin/students/${s.id}/reports`} className="w-fit rounded-sm font-medium text-ink hover:text-primary hover:underline">{s.name}</Link>

@@ -41,7 +41,7 @@ export function StaffDirectory() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Name, department or class"
-          className="h-10 w-full rounded-lg border border-input bg-canvas pr-3 pl-9 text-sm text-ink outline-none placeholder:text-ink-faint focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
+          className="h-10 pointer-coarse:h-11 pointer-coarse:text-base w-full rounded-lg border border-input bg-canvas pr-3 pl-9 text-sm text-ink outline-none placeholder:text-ink-faint focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
         />
       </div>
       {groups.length === 0 ? (

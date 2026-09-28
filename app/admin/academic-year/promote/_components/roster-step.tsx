@@ -21,17 +21,21 @@ export function RosterStep({ roster, year }: { roster: ClassRoster[]; year: stri
                 <span className="flex-1 truncate text-sm text-ink-soft">{c.teacherName}</span>
                 <span className="tabular text-sm text-ink">{c.students.length} {c.students.length === 1 ? "student" : "students"}</span>
               </summary>
-              <ul className="divide-y divide-line border-t border-line">
-                {c.students.map((s) => (
-                  <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-2 pl-11">
-                    <span className="text-[15px] text-ink">
-                      <span className="tabular mr-2 text-ink-faint">#{s.rollNumber}</span>
-                      {s.name}
-                    </span>
-                    <HealthFlags allergies={s.medicalHistory.school.allergies} conditions={s.medicalHistory.school.conditions} max={2} />
-                  </li>
-                ))}
-              </ul>
+              {c.students.length === 0 ? (
+                <p className="border-t border-line px-4 py-3 pl-11 text-sm text-ink-soft">No active students in this class, so there&apos;s no one to move.</p>
+              ) : (
+                <ul className="divide-y divide-line border-t border-line">
+                  {c.students.map((s) => (
+                    <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-2 pl-11">
+                      <span className="text-[15px] text-ink">
+                        <span className="tabular mr-2 text-ink-faint">#{s.rollNumber}</span>
+                        {s.name}
+                      </span>
+                      <HealthFlags allergies={s.medicalHistory.school.allergies} conditions={s.medicalHistory.school.conditions} max={2} />
+                    </li>
+                  ))}
+                </ul>
+              )}
             </details>
           </li>
         ))}

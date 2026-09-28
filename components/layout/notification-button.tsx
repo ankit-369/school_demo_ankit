@@ -13,11 +13,11 @@ export function NotificationButton() {
       href="/admin/notifications-log"
       aria-label={pending > 0 ? `Notifications, ${pending} awaiting delivery` : "Notifications"}
       className={cn(
-        "relative flex size-9 shrink-0 items-center justify-center rounded-lg text-ink-soft transition-colors duration-150 hover:bg-surface hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-primary",
+        "relative flex size-9 pointer-coarse:size-11 shrink-0 items-center justify-center rounded-lg text-ink-soft transition-colors duration-150 hover:bg-surface hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-primary",
       )}
     >
       <Bell aria-hidden className="size-[18px]" />
-      {pending > 0 && <span aria-hidden className="absolute top-2 right-2 size-2 rounded-full bg-danger ring-2 ring-canvas" />}
+      {pending > 0 && <span aria-hidden className="absolute top-2 right-2 pointer-coarse:top-3 pointer-coarse:right-3 size-2 rounded-full bg-danger ring-2 ring-canvas" />}
     </Link>
   );
 }

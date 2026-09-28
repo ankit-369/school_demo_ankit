@@ -21,7 +21,7 @@ export function SummaryView({ campId, stationId }: { campId: string; stationId?:
   const stations = useMemo(() => (camp ? stationProgress(camp, students) : []), [camp, students]);
 
   if (!camp || !station) {
-    return <EmptyState icon={CalendarX} title="Camp not found" description="Go back and pick a camp." action={<Link href="/nurse" className="text-sm font-medium text-primary">All camps</Link>} />;
+    return <EmptyState icon={CalendarX} title="Camp not found" description="It may have ended or been removed. Pick a camp from the list to carry on." action={<Link href="/nurse" className="tap-target text-sm font-medium text-primary">All camps</Link>} />;
   }
 
   const screened = rows.filter(isScreened);
@@ -58,8 +58,10 @@ export function SummaryView({ campId, stationId }: { campId: string; stationId?:
           </Link>
         ))}
       </Panel>
-      {followUps.length > 0 && (
-        <Panel title="Follow-ups at this station" bodyClassName="p-0 gap-0">
+      <Panel title="Follow-ups at this station" bodyClassName="p-0 gap-0">
+        {followUps.length === 0 ? (
+          <p className="px-5 py-4 text-sm text-ink-soft">No follow-ups raised here so far. Anyone you flag shows up here with your note.</p>
+        ) : (
           <ul className="divide-y divide-line">
             {followUps.map((r) => (
               <li key={r.student.id}>
@@ -70,8 +72,8 @@ export function SummaryView({ campId, stationId }: { campId: string; stationId?:
               </li>
             ))}
           </ul>
-        </Panel>
-      )}
+        )}
+      </Panel>
     </div>
   );
 }

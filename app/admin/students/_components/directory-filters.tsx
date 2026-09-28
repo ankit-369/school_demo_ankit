@@ -37,7 +37,7 @@ export function DirectoryFilters({ value, onChange, healthTags }: DirectoryFilte
           value={value.query}
           onChange={set("query")}
           placeholder="Name, HFID or admission no."
-          className="h-10 w-full rounded-lg border border-input bg-canvas pr-3 pl-9 text-sm text-ink outline-none placeholder:text-ink-faint focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
+          className="h-10 pointer-coarse:h-11 pointer-coarse:text-base w-full rounded-lg border border-input bg-canvas pr-3 pl-9 text-sm text-ink outline-none placeholder:text-ink-faint focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
         />
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:flex lg:flex-1">

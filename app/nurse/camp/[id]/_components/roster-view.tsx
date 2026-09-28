@@ -19,7 +19,7 @@ export function RosterView({ campId, stationId }: { campId: string; stationId?: 
   const [view, setView] = useState<View>("todo");
 
   if (!camp || !station) {
-    return <EmptyState icon={CalendarX} title="Camp not found" description="Go back and pick a camp." action={<Link href="/nurse" className="text-sm font-medium text-primary">All camps</Link>} />;
+    return <EmptyState icon={CalendarX} title="Camp not found" description="It may have ended or been removed. Pick a camp from the list to carry on." action={<Link href="/nurse" className="tap-target text-sm font-medium text-primary">All camps</Link>} />;
   }
 
   const done = rows.filter((r) => !isToDo(r));
@@ -57,7 +57,7 @@ export function RosterView({ campId, stationId }: { campId: string; stationId?: 
       />
       {shown.length === 0 ? (
         view === "todo" && !q ? (
-          <EmptyState icon={PartyPopper} title="Station complete" description="Everyone on this roster has been screened." action={<Link href={stationHref(camp.id, "summary", station.id)} className="text-sm font-medium text-primary">See the summary</Link>} />
+          <EmptyState icon={PartyPopper} title="Station complete" description="Everyone on this roster has been screened." action={<Link href={stationHref(camp.id, "summary", station.id)} className="tap-target text-sm font-medium text-primary">See the summary</Link>} />
         ) : (
           <EmptyState icon={Search} title="No one matches" description="Try another name or class." />
         )
@@ -69,7 +69,7 @@ export function RosterView({ campId, stationId }: { campId: string; stationId?: 
         </ul>
       )}
       {next && (
-        <div className="fixed inset-x-0 bottom-0 z-10 border-t border-line bg-canvas/95 px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] backdrop-blur">
+        <div className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+var(--bottom-nav-height))] z-20 border-t border-line bg-canvas/95 px-4 py-3 backdrop-blur">
           <Link
             href={screenHref(camp.id, next.student.id, station.id)}
             className="mx-auto flex h-14 max-w-2xl items-center justify-center gap-2 rounded-xl bg-primary text-[16px] font-semibold text-white transition-colors duration-150 hover:bg-primary/90"

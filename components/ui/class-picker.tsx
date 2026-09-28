@@ -32,7 +32,7 @@ export function ClassPicker({ value, onChange, disabled }: ClassPickerProps) {
                   aria-label={`${gradeLabel(g)} division ${d}`}
                   onClick={() => toggle(k)}
                   className={cn(
-                    "flex size-8 items-center justify-center rounded-md border text-xs font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-60 pointer-coarse:size-10",
+                    "flex size-8 items-center justify-center rounded-md border text-xs font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-60 pointer-coarse:size-11",
                     on ? "border-primary bg-primary text-white" : "border-line text-ink-soft hover:border-ink-faint/60",
                   )}
                 >

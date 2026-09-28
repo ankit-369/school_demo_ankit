@@ -32,7 +32,7 @@ export function StaffHeader({ staff, canManage, isSelf }: { staff: Staff; canMan
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
           <div className="flex flex-col gap-1 text-sm text-ink-soft">
-            <a href={`mailto:${staff.email}`} className="inline-flex items-center gap-2 hover:text-ink">
+            <a href={`mailto:${staff.email}`} className="inline-flex items-center gap-2 hover:text-ink pointer-coarse:min-h-11">
               <Mail aria-hidden className="size-4 text-ink-faint" /> {staff.email}
             </a>
             <span className="inline-flex items-center gap-2">

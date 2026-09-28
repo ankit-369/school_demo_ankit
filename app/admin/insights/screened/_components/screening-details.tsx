@@ -26,7 +26,7 @@ export function ScreeningDetails({ item, campId }: { item: ScreenedScreening; ca
           {rows.map(({ student: s, result }) => (
             <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 pl-11">
               <span className="min-w-0">
-                <Link href={`/admin/students/${s.id}/camp-history`} className="rounded-sm text-[15px] text-ink hover:text-primary hover:underline">
+                <Link href={`/admin/students/${s.id}/camp-history`} className="tap-target rounded-sm text-[15px] text-ink hover:text-primary hover:underline">
                   {s.name}
                 </Link>
                 <span className="text-[13px] text-ink-faint"> · {classKey(s.grade, s.division)}</span>
@@ -35,7 +35,7 @@ export function ScreeningDetails({ item, campId }: { item: ScreenedScreening; ca
             </li>
           ))}
         </ul>
-        <Link href={`/admin/camps/${campId}/${screening.id}`} className="block border-t border-line px-4 py-2.5 pl-11 text-sm font-medium text-primary hover:underline">
+        <Link href={`/admin/camps/${campId}/${screening.id}`} className="flex min-h-11 items-center border-t border-line px-4 py-2.5 pl-11 text-sm font-medium text-primary hover:underline">
           Open full results
         </Link>
       </div>

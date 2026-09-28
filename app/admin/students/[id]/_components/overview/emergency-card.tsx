@@ -35,7 +35,7 @@ export function EmergencyCard({ student: s }: { student: Student }) {
           </p>
           <a
             href={`tel:${s.guardian.phone.replace(/\s/g, "")}`}
-            className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-line px-3 text-sm font-medium text-ink transition-colors duration-150 hover:bg-surface"
+            className="inline-flex min-h-10 pointer-coarse:min-h-11 items-center gap-2 rounded-lg border border-line px-3 text-sm font-medium text-ink transition-colors duration-150 hover:bg-surface"
           >
             <Phone aria-hidden className="size-4 text-ink-faint" />
             {s.guardian.phone}

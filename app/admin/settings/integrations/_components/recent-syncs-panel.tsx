@@ -17,7 +17,7 @@ export function RecentSyncsPanel({ rows }: { rows: SyncRow[] }) {
             <li key={s.id} className="flex items-center justify-between gap-3 px-5 py-3">
               <div className="flex items-center gap-2 text-sm">
                 <RefreshCw aria-hidden className="size-3.5 shrink-0 text-synced" />
-                <Link href={`/admin/students/${s.id}/medical-history`} className="rounded-sm font-medium text-ink hover:text-primary hover:underline">{s.name}</Link>
+                <Link href={`/admin/students/${s.id}/medical-history`} className="tap-target rounded-sm font-medium text-ink hover:text-primary hover:underline">{s.name}</Link>
                 <span className="text-ink-faint">{classKey(s.grade, s.division)}</span>
               </div>
               <time dateTime={syncedAt} title={formatDateTime(syncedAt)} className="shrink-0 text-[13px] text-ink-faint">

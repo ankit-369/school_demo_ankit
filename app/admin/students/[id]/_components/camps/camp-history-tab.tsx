@@ -48,7 +48,14 @@ export function CampHistoryTab() {
         <KpiTile label="Camps attended" value={attended} />
       </KpiBand>
       <ArchiveToggle count={archivedCount} shown={showArchived} onToggle={() => setShowArchived((v) => !v)} className="self-start" />
-      {rows.length === 0 && <p className="text-sm text-ink-faint">No screenings yet this academic year.</p>}
+      {rows.length === 0 && (
+        <EmptyState
+          icon={Stethoscope}
+          title="No screenings this academic year yet"
+          description={archivedCount > 0 ? "Earlier years are archived. Show archived records to see them." : "They'll appear here after this student's next health camp."}
+          className="rounded-xl border border-line"
+        />
+      )}
       {groups.map((g) => (
         <CampHistoryGroup key={g[0].camp.id} camp={g[0].camp} rows={g} studentName={student.name} />
       ))}

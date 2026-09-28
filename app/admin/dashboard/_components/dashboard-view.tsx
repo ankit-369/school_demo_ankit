@@ -44,7 +44,7 @@ export function DashboardView() {
         <SectionHeading
           title="Recent health camps"
           actions={
-            <Link href="/admin/camps" className="rounded-sm text-sm font-medium text-primary hover:underline">
+            <Link href="/admin/camps" className="tap-target rounded-sm text-sm font-medium text-primary hover:underline">
               View all
             </Link>
           }

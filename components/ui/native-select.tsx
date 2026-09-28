@@ -16,7 +16,7 @@ export function NativeSelect({ options, placeholder, className, ...props }: Nati
     <div className={cn("relative", className)}>
       <select
         {...props}
-        className="h-10 w-full appearance-none rounded-lg border border-input bg-canvas pr-9 pl-3 text-sm text-ink transition-colors duration-150 outline-none hover:border-ink-faint/60 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-danger"
+        className="h-10 w-full appearance-none pointer-coarse:h-11 pointer-coarse:text-base rounded-lg border border-input bg-canvas pr-9 pl-3 text-sm text-ink transition-colors duration-150 outline-none hover:border-ink-faint/60 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-danger"
       >
         {placeholder !== undefined && <option value="">{placeholder}</option>}
         {options.map((o) => (

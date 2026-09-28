@@ -25,7 +25,7 @@ const columns: Column<AuditLogEntry>[] = [
       </time>
     ),
   },
-  { id: "actor", header: "Actor", cell: (e) => <span className="font-medium text-ink">{e.actor}</span> },
+  { id: "actor", header: "Actor", mobile: "title", cell: (e) => <span className="font-medium text-ink">{e.actor}</span> },
   { id: "action", header: "Action", cell: (e) => <span className="text-ink-soft">{humanizeAction(e.action)}</span> },
   { id: "target", header: "Target", className: "whitespace-normal", cell: (e) => e.target },
   { id: "reason", header: "Reason for change", className: "whitespace-normal min-w-56", cell: (e) => (e.reason ? e.reason : <span className="text-ink-faint">—</span>) },
@@ -54,7 +54,7 @@ export function AuditLogView() {
             value={filter.query}
             onChange={(e) => setFilter((f) => ({ ...f, query: e.target.value }))}
             placeholder="Actor, action, target or reason"
-            className="h-10 w-full rounded-lg border border-input bg-canvas pr-3 pl-9 text-sm text-ink outline-none placeholder:text-ink-faint focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
+            className="h-10 pointer-coarse:h-11 pointer-coarse:text-base w-full rounded-lg border border-input bg-canvas pr-3 pl-9 text-sm text-ink outline-none placeholder:text-ink-faint focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
           />
         </div>
         <NativeSelect

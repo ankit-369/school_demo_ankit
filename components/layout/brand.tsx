@@ -5,7 +5,7 @@ export function Brand() {
   return (
     <Link
       href="/admin/dashboard"
-      className="flex items-center gap-2.5 rounded-md text-ink"
+      className="flex items-center gap-2.5 rounded-md text-ink pointer-coarse:min-h-11"
       aria-label="HealthConnect home"
     >
       <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-white">

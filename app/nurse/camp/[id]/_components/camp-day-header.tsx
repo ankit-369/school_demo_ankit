@@ -20,7 +20,7 @@ type CampDayHeaderProps = {
 export function CampDayHeader({ camp, station, done, total, page }: CampDayHeaderProps) {
   return (
     <header className="flex flex-col gap-4">
-      <Link href="/nurse" className="inline-flex w-fit items-center gap-1 rounded-sm text-sm font-medium text-ink-soft hover:text-ink">
+      <Link href="/nurse" className="inline-flex w-fit items-center gap-1 rounded-sm text-sm font-medium text-ink-soft hover:text-ink pointer-coarse:min-h-11">
         <ChevronLeft aria-hidden className="size-4" />
         All camps
       </Link>

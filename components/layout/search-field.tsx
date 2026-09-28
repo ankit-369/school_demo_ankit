@@ -23,7 +23,7 @@ export function SearchField({ className, autoFocus }: SearchFieldProps) {
         type="search"
         autoFocus={autoFocus}
         placeholder="Search students by name or HFID"
-        className="h-10 w-full rounded-lg border border-line bg-surface pr-3 pl-9 text-sm text-ink transition-colors duration-150 placeholder:text-ink-faint hover:bg-canvas focus:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-primary"
+        className="h-10 pointer-coarse:h-11 pointer-coarse:text-base w-full rounded-lg border border-line bg-surface pr-3 pl-9 text-sm text-ink transition-colors duration-150 placeholder:text-ink-faint hover:bg-canvas focus:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-primary"
       />
     </form>
   );

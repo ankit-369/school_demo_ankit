@@ -1,21 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronRight, NotebookPen, ShieldAlert, Users } from "lucide-react";
+import { NotebookPen, ShieldCheck, Users } from "lucide-react";
 import { useState } from "react";
 import { ChipGroup } from "@/components/ui/chip-group";
 import { EmptyState } from "@/components/ui/empty-state";
-import { StudentAvatar } from "@/components/ui/student-avatar";
-import { HealthFlags } from "@/components/students/health-flags";
 import { classKey, type ClassKey } from "@/lib/types/grade";
+import { ClassRosterRow, hasHealthAlert } from "./class-roster-row";
 import { useMyClass } from "./use-my-class";
 
-/** Roster only: names and health badges. Tapping a student opens their action card, not their history. */
-export function ClassRoster() {
+/**
+ * Roster only: names and health badges. Tapping a student opens their action card, not their history.
+ * `alertsOnly` narrows it to students with an allergy or condition (the Alerts tab).
+ */
+export function ClassRoster({ alertsOnly = false }: { alertsOnly?: boolean }) {
   const { teacher, classes, students } = useMyClass();
   const [filter, setFilter] = useState<ClassKey | "all">("all");
-  const shown = filter === "all" ? students : students.filter((s) => classKey(s.grade, s.division) === filter);
-  const flagged = students.filter((s) => s.medicalHistory.school.allergies.length + s.medicalHistory.school.conditions.length > 0).length;
+  const pool = alertsOnly ? students.filter(hasHealthAlert) : students;
+  const shown = filter === "all" ? pool : pool.filter((s) => classKey(s.grade, s.division) === filter);
+  const flagged = students.filter(hasHealthAlert).length;
 
   if (!teacher || classes.length === 0) {
     return <EmptyState icon={Users} title="No classes assigned" description="Ask an administrator to assign your classes on the staff page." />;
@@ -25,15 +28,17 @@ export function ClassRoster() {
     <div className="flex flex-col gap-5">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl leading-8 font-semibold tracking-tight text-ink">{teacher.name}</h1>
+          <h1 className="text-2xl leading-8 font-semibold tracking-tight text-ink">{alertsOnly ? "Health alerts" : teacher.name}</h1>
           <p className="mt-1 text-[15px] text-ink-soft">
-            {students.length} students · {flagged} with a health alert
+            {alertsOnly ? "Students with an allergy or condition. Tap one for their action plan." : `${students.length} students · ${flagged} with a health alert`}
           </p>
         </div>
-        <Link href="/teacher/incident/new" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-[15px] font-semibold text-white transition-colors duration-150 hover:bg-primary/90">
-          <NotebookPen aria-hidden className="size-4" />
-          Log an incident
-        </Link>
+        {!alertsOnly && (
+          <Link href="/teacher/incident/new" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-[15px] font-semibold text-white transition-colors duration-150 hover:bg-primary/90">
+            <NotebookPen aria-hidden className="size-4" />
+            Log an incident
+          </Link>
+        )}
       </header>
       {classes.length > 1 && (
         <ChipGroup
@@ -43,28 +48,24 @@ export function ClassRoster() {
           chips={[{ value: "all" as const, label: "All my classes" }, ...classes.map((c) => ({ value: c, label: c }))]}
         />
       )}
-      <ul className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-canvas">
-        {shown.map((s) => {
-          const { allergies, conditions } = s.medicalHistory.school;
-          const alert = allergies.length + conditions.length > 0;
-          return (
-            <li key={s.id}>
-              <Link href={`/teacher/class/${s.id}/alert`} className="flex min-h-16 items-center gap-3 px-4 py-3 transition-colors duration-150 hover:bg-surface">
-                <StudentAvatar name={s.name} photoUrl={s.photoUrl} size="md" />
-                <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                  <span className="flex items-baseline justify-between gap-2">
-                    <span className="truncate text-[16px] font-medium text-ink">{s.name}</span>
-                    <span className="shrink-0 text-[13px] text-ink-faint">{classKey(s.grade, s.division)} · #{s.rollNumber}</span>
-                  </span>
-                  <HealthFlags allergies={allergies} conditions={conditions} max={3} />
-                </div>
-                {alert && <ShieldAlert aria-label="Has an action plan" className="size-5 shrink-0 text-danger" />}
-                <ChevronRight aria-hidden className="size-5 shrink-0 text-ink-faint" />
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      {shown.length === 0 ? (
+        <EmptyState
+          icon={alertsOnly ? ShieldCheck : Users}
+          title={alertsOnly ? "No health alerts here" : "No students in this class yet"}
+          description={
+            alertsOnly
+              ? "No one here has an allergy or condition on the school record. If that changes, they'll show up here."
+              : "Once the office adds students to this class, they'll appear here."
+          }
+          className="rounded-xl border border-line bg-canvas"
+        />
+      ) : (
+        <ul className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-canvas">
+          {shown.map((s) => (
+            <ClassRosterRow key={s.id} student={s} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

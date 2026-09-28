@@ -1,16 +1,16 @@
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { Brand } from "./brand";
 import { RoleSwitcher } from "./role-switcher";
 import { RoleSync } from "./role-sync";
 import type { Role } from "@/lib/types/role";
 
-type RoleAppShellProps = { role: Role; title: string; children: ReactNode };
+type RoleAppShellProps = { role: Role; title: string; children: ReactNode; /** The app's bottom tab bar. */ tabs?: ReactNode };
 
 /**
- * Mobile-first frame for the nurse and teacher apps: no sidebar or bottom bar,
- * one narrow column, big targets. The role switcher is the way back out.
+ * Mobile-first frame for the nurse and teacher apps: no sidebar, one narrow
+ * column, big targets and a bottom tab bar. The role switcher is the way back out.
  */
-export function RoleAppShell({ role, title, children }: RoleAppShellProps) {
+export function RoleAppShell({ role, title, children, tabs }: RoleAppShellProps) {
   return (
     <div className="min-h-dvh bg-surface">
       <RoleSync role={role} />
@@ -28,9 +28,10 @@ export function RoleAppShell({ role, title, children }: RoleAppShellProps) {
           <RoleSwitcher />
         </div>
       </header>
-      <main id="main" className="mx-auto w-full max-w-2xl px-4 pt-5 pb-[calc(env(safe-area-inset-bottom)+6rem)]">
+      <main id="main" className="mx-auto w-full max-w-2xl px-4 pt-5 pb-[calc(env(safe-area-inset-bottom)+var(--bottom-nav-height)+6rem)]">
         {children}
       </main>
+      {tabs && <Suspense>{tabs}</Suspense>}
     </div>
   );
 }

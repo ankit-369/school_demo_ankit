@@ -50,7 +50,7 @@ export function DoctorLinkDialog({ camp, screening }: { camp: Camp; screening: S
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="doctor-link" className="text-sm font-medium text-ink">Link for {live.doctorName}</label>
-            <input id="doctor-link" readOnly value={url} onFocus={(e) => e.currentTarget.select()} className="h-10 w-full rounded-lg border border-line bg-surface px-3 font-mono text-[13px] text-ink" />
+            <input id="doctor-link" readOnly value={url} onFocus={(e) => e.currentTarget.select()} className="h-10 pointer-coarse:h-11 pointer-coarse:text-base w-full rounded-lg border border-line bg-surface px-3 font-mono text-[13px] text-ink" />
             <p className="text-[13px] text-ink-faint">Valid until {formatDate(live.expiresAt.slice(0, 10))}. Anyone with this link can enter results, so share it only with the doctor.</p>
           </div>
           <div className="flex flex-wrap gap-2">

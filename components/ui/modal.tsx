@@ -23,9 +23,14 @@ type ModalProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   size?: "sm" | "md" | "lg";
+  /** Phones: forms open as a full-screen sheet; short confirmations stay a centered dialog. */
+  mobile?: "sheet" | "dialog";
 };
 
 const SIZES = { sm: "sm:max-w-sm", md: "sm:max-w-lg", lg: "sm:max-w-2xl" };
+
+const SHEET =
+  "max-sm:inset-0 max-sm:h-dvh max-sm:max-h-none max-sm:max-w-none max-sm:translate-x-0 max-sm:translate-y-0 max-sm:rounded-none max-sm:ring-0 max-sm:data-open:zoom-in-100 max-sm:data-open:slide-in-from-bottom-6 max-sm:data-closed:zoom-out-100 max-sm:data-closed:slide-out-to-bottom-6";
 
 export function Modal({
   title,
@@ -36,12 +41,13 @@ export function Modal({
   open,
   onOpenChange,
   size = "md",
+  mobile = "sheet",
 }: ModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className={cn("flex max-h-[min(90dvh,820px)] flex-col gap-0 p-0", SIZES[size])}>
-        <DialogHeader className="gap-1 px-6 pt-6 pr-12 pb-4">
+      <DialogContent className={cn("flex max-h-[min(90dvh,820px)] flex-col gap-0 p-0", SIZES[size], mobile === "sheet" && SHEET)}>
+        <DialogHeader className="gap-1 px-6 pt-6 pr-14 pb-4">
           <DialogTitle className="text-lg font-semibold text-ink">{title}</DialogTitle>
           {description && (
             <DialogDescription className="text-sm text-ink-soft">{description}</DialogDescription>
@@ -50,7 +56,7 @@ export function Modal({
         {children && (
           <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-6 text-[15px] text-ink">{children}</div>
         )}
-        {footer && <DialogFooter className="mx-0 mb-0 bg-canvas px-6 py-4">{footer}</DialogFooter>}
+        {footer && <DialogFooter className="mx-0 mb-0 bg-canvas px-6 py-4 max-sm:pb-[calc(env(safe-area-inset-bottom)+1rem)]">{footer}</DialogFooter>}
       </DialogContent>
     </Dialog>
   );
