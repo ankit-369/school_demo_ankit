@@ -18,6 +18,8 @@ export type Notification = {
   channel: NotificationChannel;
   status: NotificationStatus;
   createdAt: string;
+  /** The "Viewing as" persona who sent it, e.g. "Ms. Helena Vance". */
+  sentBy: string;
   /** Id of the record this is about (e.g. a pending item), so the UI can show "reminded". */
   refId?: string;
 };

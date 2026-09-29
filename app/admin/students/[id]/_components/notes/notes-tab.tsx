@@ -38,7 +38,7 @@ export function NotesTab() {
         <ol className="flex flex-col gap-3">
           {notes.map((n) => (
             <li key={n.id}>
-              <NoteCard note={n} notification={notificationFor(n.notification?.sentAt)} />
+              <NoteCard note={n} notification={notificationFor(n.notifiedAt)} guardianName={student.guardian.name} />
             </li>
           ))}
         </ol>

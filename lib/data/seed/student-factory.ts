@@ -1,3 +1,4 @@
+import { formatPhone } from "@/lib/config";
 import { GRADES, type Division, type Grade } from "@/lib/types/grade";
 import type {
   HfilesMedicalHistory,
@@ -94,7 +95,7 @@ export function makeStudent(s: StudentSeed): Student {
     guardian: {
       name: s.guardian[0],
       relation: s.guardian[1],
-      phone: `+91 98${String(100 + s.seq * 7)} ${String(10000 + s.seq * 2711).slice(-5)}`,
+      phone: formatPhone(),
     },
     status: "active",
     medicalHistory: {

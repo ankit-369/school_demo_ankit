@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { HydrationGate } from "@/components/ui/hydration-gate";
 import { PageHeader } from "@/components/ui/page-header";
 import { SkeletonBlock } from "@/components/ui/skeleton-block";
+import { DashboardHeaderDescription } from "./_components/dashboard-header-description";
 import { DashboardView } from "./_components/dashboard-view";
 
 export const metadata: Metadata = { title: "Dashboard" };
@@ -11,7 +12,7 @@ export default function AdminDashboardPage() {
     <div className="flex flex-col gap-8">
       <PageHeader
         title="Hello, Mr. Ankit"
-        description="Here's today's health overview for Shanti Asiatic School."
+        description={<DashboardHeaderDescription />}
       />
       <HydrationGate
         fallback={

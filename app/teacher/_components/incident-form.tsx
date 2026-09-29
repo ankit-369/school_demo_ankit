@@ -13,30 +13,48 @@ import { NativeSelect } from "@/components/ui/native-select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useCan } from "@/lib/hooks/use-can";
+import { can as canDo } from "@/lib/permissions";
 import { useAppStore } from "@/lib/store/app-store";
 import { classKey } from "@/lib/types/grade";
-import { composeIncidentNote, INCIDENT_KINDS, incidentSchema, type IncidentValues } from "./incident-schema";
+import { composeIncidentNote, incidentGuardianReason, INCIDENT_KINDS, incidentSchema, type IncidentValues } from "./incident-schema";
 import { useMyClass } from "./use-my-class";
 
 /** Writes through the same addClinicalNote action as the nurse's form — it lands in the student's Notes tab. */
 export function IncidentForm({ presetStudentId }: { presetStudentId?: string }) {
   const { students } = useMyClass();
   const addNote = useAppStore((s) => s.addClinicalNote);
+  const role = useAppStore((s) => s.role);
+  const canNotify = canDo(role, "notifyGuardian");
   const can = useCan("logIncidents");
   const router = useRouter();
   const preset = students.some((s) => s.id === presetStudentId) ? presetStudentId : "";
   const form = useForm<IncidentValues>({
     resolver: zodResolver(incidentSchema),
-    defaultValues: { studentId: preset, details: "", actionTaken: "", nurseFollowUp: true },
+    defaultValues: { studentId: preset, details: "", actionTaken: "", nurseFollowUp: true, notifyGuardian: canNotify },
   });
   const e = form.formState.errors;
 
   if (!can) return <EmptyState icon={Lock} title="You can't log incidents" description="Ask an administrator to grant “Log classroom incidents”." />;
 
   const onSubmit = form.handleSubmit((v) => {
-    addNote({ studentId: v.studentId, type: "incident", urgent: v.nurseFollowUp, notes: composeIncidentNote(v) });
+    const notifyNow = canNotify && v.notifyGuardian;
+    addNote({
+      studentId: v.studentId,
+      type: "incident",
+      urgent: v.nurseFollowUp,
+      notes: composeIncidentNote(v),
+      reason: incidentGuardianReason(v.kind),
+      actionTaken: v.actionTaken,
+      notifyNow,
+    });
     const name = students.find((s) => s.id === v.studentId)?.name ?? "the student";
-    toast.success(`Incident logged for ${name}`, { description: v.nurseFollowUp ? "The nurse will see it flagged as urgent." : "Saved to their notes." });
+    toast.success(`Incident logged for ${name}`, {
+      description: notifyNow
+        ? `Guardian notified. ${v.nurseFollowUp ? "The nurse will see it flagged as urgent." : ""}`.trim()
+        : v.nurseFollowUp
+          ? "The nurse will see it flagged as urgent."
+          : "Saved to their notes.",
+    });
     router.push(`/teacher/class/${v.studentId}/alert`);
   });
 
@@ -76,6 +94,21 @@ export function IncidentForm({ presetStudentId }: { presetStudentId?: string }) 
             </div>
           )}
         />
+        {canNotify && (
+          <Controller
+            control={form.control}
+            name="notifyGuardian"
+            render={({ field }) => (
+              <div className="flex items-center justify-between gap-4 rounded-lg bg-surface px-4 py-3">
+                <label htmlFor="inc-notify" className="flex flex-col">
+                  <span className="text-sm font-medium text-ink">Notify guardian now</span>
+                  <span className="text-[13px] text-ink-faint">Sends a WhatsApp message with these details</span>
+                </label>
+                <Switch id="inc-notify" checked={field.value} onCheckedChange={field.onChange} />
+              </div>
+            )}
+          />
+        )}
       </div>
       <button type="submit" className="h-14 rounded-xl bg-primary text-[16px] font-semibold text-white transition-colors duration-150 hover:bg-primary/90">
         Save incident

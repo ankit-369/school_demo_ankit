@@ -7,6 +7,7 @@ import { ChipGroup } from "@/components/ui/chip-group";
 import { EmptyState } from "@/components/ui/empty-state";
 import { classKey, type ClassKey } from "@/lib/types/grade";
 import { ClassRosterRow, hasHealthAlert } from "./class-roster-row";
+import { PendingVisitsSection } from "./pending-visits-section";
 import { useMyClass } from "./use-my-class";
 
 /**
@@ -40,6 +41,7 @@ export function ClassRoster({ alertsOnly = false }: { alertsOnly?: boolean }) {
           </Link>
         )}
       </header>
+      {!alertsOnly && <PendingVisitsSection />}
       {classes.length > 1 && (
         <ChipGroup
           label="Class"

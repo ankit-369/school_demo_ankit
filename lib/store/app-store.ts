@@ -24,7 +24,7 @@ import type { AppState, DemoData } from "./state";
 
 export type { AppState, DemoData } from "./state";
 
-const STORE_VERSION = 5;
+const STORE_VERSION = 6;
 
 type PersistedState = DemoData & Pick<AppState, "role" | "academicYear" | "school" | "templates">;
 
@@ -93,6 +93,10 @@ export const useAppStore = create<AppState>()(
             doctorLinks: state.doctorLinks ?? seedDoctorLinks,
           };
         }
+        // v5 → v6: the school's name/phone/email went generic and clinical notes
+        // gained a pending/notified/not-needed guardian workflow — both reshape
+        // seed data enough that a clean reseed beats patching the old shape.
+        if (version < 6) return { ...createSeedData(), role: state?.role ?? "admin", academicYear: "2026-27", school: DEFAULT_SCHOOL_FALLBACK, templates: { ...DEFAULT_TEMPLATES } };
         return state;
       },
     },

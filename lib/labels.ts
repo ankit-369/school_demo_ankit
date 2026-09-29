@@ -1,5 +1,5 @@
 import type { CampPhase } from "@/lib/types/camp";
-import type { ClinicalNoteType } from "@/lib/types/clinical-note";
+import type { ClinicalNoteType, GuardianStatus } from "@/lib/types/clinical-note";
 import type { NotificationChannel, NotificationStatus, NotificationType } from "@/lib/types/notification";
 import type { ReportCategory } from "@/lib/types/report";
 import type { ScreeningResultStatus, ScreeningType } from "@/lib/types/screening";
@@ -47,6 +47,12 @@ export const NOTE_TYPE_LABELS: Record<ClinicalNoteType, string> = {
   incident: "Incident",
   general: "General",
   screening: "Screening",
+};
+
+export const GUARDIAN_STATUS_LABELS: Record<GuardianStatus, ToneLabel> = {
+  pending: { tone: "warning", label: "Waiting for class teacher to inform guardian" },
+  notified: { tone: "success", label: "Guardian notified" },
+  "not-needed": { tone: "neutral", label: "Not needed" },
 };
 
 export const REPORT_CATEGORY_LABELS: Record<ReportCategory, string> = {

@@ -15,14 +15,17 @@ function softLower(text: string) {
 
 /**
  * The guardian SMS/WhatsApp text. Used by both the live preview and the
- * store, so what staff see is exactly what gets sent.
+ * store, so what staff see is exactly what gets sent. `schoolName`, when
+ * given, is appended as a signature line.
  */
-export function composeGuardianMessage(studentName: string, parts: GuardianMessageParts) {
+export function composeGuardianMessage(studentName: string, parts: GuardianMessageParts, schoolName?: string) {
   const reason = clean(parts.reason);
   const sentences = [
     reason && `${firstName(studentName)} visited the medical room today for ${softLower(reason)}`,
     clean(parts.actionTaken) && capitalize(clean(parts.actionTaken)),
     clean(parts.suggestion) && capitalize(clean(parts.suggestion)),
   ].filter(Boolean);
-  return sentences.length ? `${sentences.join(". ")}.` : "";
+  if (!sentences.length) return "";
+  const body = `${sentences.join(". ")}.`;
+  return schoolName ? `${body} Regards, ${schoolName}.` : body;
 }

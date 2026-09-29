@@ -39,7 +39,7 @@ export const createReportsSlice: SliceCreator<ReportsSlice> = (set, get) => ({
     set((s) => ({
       reports: s.reports.map((r) => (r.id === reportId ? { ...r, syncedToHfiles: true } : r)),
       students: s.students.map((st) =>
-        st.id === report.studentId ? pushReportToHfiles(st, report, syncedAt) : st,
+        st.id === report.studentId ? pushReportToHfiles(st, report, syncedAt, get().school.name) : st,
       ),
     }));
   },

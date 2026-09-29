@@ -36,7 +36,7 @@ export const addStudentSchema = z.object({
   guardianPhone: z
     .string()
     .trim()
-    .regex(/^\+?[\d\s-]{10,16}$/, "Enter a valid phone number, e.g. +91 98200 12345"),
+    .regex(/^\+?[\d\s-]{10,16}$/, "Enter a valid phone number, e.g. +91 00000 00000"),
   allergies: z.string(),
   conditions: z.string(),
   notes: z.string(),

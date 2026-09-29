@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { SchoolTitleSync } from "@/components/layout/school-title-sync";
 import { Toaster } from "@/components/ui/sonner";
 import { StoreHydrator } from "@/lib/store/store-hydrator";
 import "./globals.css";
@@ -12,7 +13,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: { default: "HealthConnect", template: "%s · HealthConnect" },
-  description: "School health management for Shanti Asiatic School.",
+  description: "School health records, camps and screenings for administrators, nurses, teachers and doctors.",
 };
 
 export const viewport: Viewport = {
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         {children}
         <StoreHydrator />
+        <SchoolTitleSync />
         <Toaster position="top-right" />
       </body>
     </html>

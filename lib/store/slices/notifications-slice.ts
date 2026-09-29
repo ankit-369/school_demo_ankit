@@ -1,5 +1,5 @@
 import type { Notification } from "@/lib/types/notification";
-import { newId, nowIso } from "../helpers";
+import { actorName, newId, nowIso } from "../helpers";
 import type { SliceCreator } from "../state";
 
 export type SendNotificationInput = Pick<Notification, "studentId" | "type" | "message" | "channel" | "refId"> & {
@@ -9,17 +9,17 @@ export type SendNotificationInput = Pick<Notification, "studentId" | "type" | "m
 
 export type NotificationsSlice = {
   notifications: Notification[];
-  /** Simulated send — lands as "sent"; returns the new id. */
+  /** Simulated send — lands as "sent", attributed to the current "Viewing as" persona; returns the new id. */
   sendNotification: (input: SendNotificationInput) => string;
   markNotificationDelivered: (id: string) => void;
 };
 
-export const createNotificationsSlice: SliceCreator<NotificationsSlice> = (set) => ({
+export const createNotificationsSlice: SliceCreator<NotificationsSlice> = (set, get) => ({
   notifications: [],
   sendNotification: ({ createdAt = nowIso(), ...input }) => {
     const id = newId("ntf");
     set((s) => ({
-      notifications: [{ ...input, id, status: "sent", createdAt }, ...s.notifications],
+      notifications: [{ ...input, id, status: "sent", createdAt, sentBy: actorName(get()) }, ...s.notifications],
     }));
     return id;
   },

@@ -1,12 +1,13 @@
+import { DEFAULT_SCHOOL_NAME, DEMO_EMAIL_DOMAIN, formatPhone } from "@/lib/config";
 import { DEFAULT_TEMPLATES } from "@/lib/data/templates";
 import type { NotificationTemplates, SchoolProfile, TemplateKey } from "@/lib/types/settings";
 import type { SliceCreator } from "../state";
 
 export const DEFAULT_SCHOOL: SchoolProfile = {
-  name: "Shanti Asiatic School",
+  name: DEFAULT_SCHOOL_NAME,
   address: "Vasna-Bhayli Road, Vadodara, Gujarat 391410",
-  phone: "+91 265 6644 100",
-  email: "admin@shantiasiatic.edu.in",
+  phone: formatPhone(),
+  email: `admin@${DEMO_EMAIL_DOMAIN}`,
 };
 
 export type SettingsSlice = {

@@ -10,7 +10,7 @@ export const PERMISSIONS: { key: PermissionKey; label: string; description: stri
   { key: "addNotes", label: "Add clinical notes", description: "Record medical-room visits and incidents", group: "Health records" },
   { key: "logIncidents", label: "Log classroom incidents", description: "Quick incident reports, saved to the student's notes for the nurse", group: "Health records" },
   { key: "uploadReports", label: "Upload reports", description: "Saved to the school record and pushed to hfiles.in", group: "Health records" },
-  { key: "notifyGuardians", label: "Message guardians", description: "Send SMS or WhatsApp updates with a clinical note", group: "Communication" },
+  { key: "notifyGuardians", label: "Message guardians", description: "Send SMS or WhatsApp reminders for consent forms and pending reports", group: "Communication" },
   { key: "manageCamps", label: "Schedule health camps", description: "Create camps and add screenings", group: "Health camps" },
   { key: "recordResults", label: "Record screening results", description: "Mark students completed or needing follow-up", group: "Health camps" },
   { key: "sendToHfiles", label: "Send results to hfiles.in", description: "Push screening results to families' records", group: "Health camps" },

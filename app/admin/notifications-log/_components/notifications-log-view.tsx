@@ -45,6 +45,7 @@ const columns: Column<NotificationRow>[] = [
     cell: ({ notification: n }) => <span className="line-clamp-2 text-sm text-ink-soft">{n.message}</span>,
   },
   { id: "channel", header: "Channel", cell: ({ notification: n }) => CHANNEL_LABELS[n.channel] },
+  { id: "sentBy", header: "Sent by", cell: ({ notification: n }) => <span className="text-ink-soft">{n.sentBy}</span> },
   { id: "status", header: "Status", cell: ({ notification: n }) => <StatusBadge {...NOTIFICATION_STATUS[n.status]} /> },
 ];
 
