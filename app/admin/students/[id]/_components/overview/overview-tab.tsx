@@ -5,6 +5,7 @@ import { useAppStore } from "@/lib/store/app-store";
 import { studentTimeline } from "@/lib/selectors/timeline";
 import { useCurrentStudent } from "../student-context";
 import { EmergencyCard } from "./emergency-card";
+import { ParticularsCard } from "./particulars-card";
 import { RecentTimeline } from "./recent-timeline";
 import { VitalsBand } from "./vitals-band";
 
@@ -22,8 +23,9 @@ export function OverviewTab() {
     <div className="flex flex-col gap-6">
       <VitalsBand student={student} />
       <div className="grid gap-6 lg:grid-cols-5">
-        <div className="lg:col-span-2">
+        <div className="flex flex-col gap-6 lg:col-span-2">
           <EmergencyCard student={student} />
+          <ParticularsCard student={student} />
         </div>
         <div className="lg:col-span-3">
           <RecentTimeline items={timeline} />

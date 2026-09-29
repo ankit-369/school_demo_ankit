@@ -5,12 +5,15 @@ import type { SliceCreator } from "../state";
 
 export type UploadReportInput = Pick<Report, "studentId" | "fileName" | "category" | "size">;
 
+export type ReportPatch = Partial<Pick<Report, "fileName" | "category" | "uploadDate" | "doctor">>;
+
 export type ReportsSlice = {
   reports: Report[];
   /** Stores the report, then auto-pushes it to hfiles.in. Returns the new report. */
   uploadReport: (input: UploadReportInput) => Report;
   /** Pushes an existing, not-yet-synced report to the student's hfiles.in timeline. */
   syncReportToHfiles: (reportId: string) => void;
+  updateReport: (reportId: string, patch: ReportPatch, summary: string) => void;
   deleteReport: (reportId: string, reason: string) => void;
 };
 
@@ -42,6 +45,12 @@ export const createReportsSlice: SliceCreator<ReportsSlice> = (set, get) => ({
         st.id === report.studentId ? pushReportToHfiles(st, report, syncedAt, get().school.name) : st,
       ),
     }));
+  },
+
+  updateReport: (reportId, patch, summary) => {
+    const report = get().reports.find((r) => r.id === reportId);
+    set((s) => ({ reports: s.reports.map((r) => (r.id === reportId ? { ...r, ...patch } : r)) }));
+    if (report) get().logAudit("report.updated", report.fileName, summary);
   },
 
   deleteReport: (reportId, reason) => {

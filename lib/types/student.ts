@@ -30,6 +30,13 @@ export type Guardian = {
   phone: string;
 };
 
+/** Who to call in an emergency if the primary guardian can't be reached — often the same person. */
+export type EmergencyContact = {
+  name: string;
+  relation: string;
+  phone: string;
+};
+
 export type Student = {
   id: string;
   hfid: string;
@@ -46,13 +53,17 @@ export type Student = {
   heightCm: number;
   weightKg: number;
   bmi: number;
-  /** Snellen notation, e.g. "6/6". */
+  /** Snellen notation, e.g. "6/6"; "L 6/6 · R 6/9" when the eyes differ. */
   vision: string;
   hearing: HearingStatus;
   admissionNo: string;
   house: House;
   transport: Transport;
   guardian: Guardian;
+  emergencyContact: EmergencyContact;
+  /** Set only when known — many records only have the guardian's side on file. */
+  motherName?: string;
+  fatherName?: string;
   status: StudentStatus;
   /** Previous academic years, oldest first. */
   history?: YearRecord[];

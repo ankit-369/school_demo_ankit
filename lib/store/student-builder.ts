@@ -31,7 +31,7 @@ export function buildStudent({ school, photoUrl = null, ...input }: NewStudentIn
     classTeacherId: classTeacher(staff, input.grade, input.division),
     status: "active",
     medicalHistory: {
-      school: { allergies: [], conditions: [], surgeries: [], notes: "", ...school },
+      school: { allergies: [], conditions: [], surgeries: [], familyHistory: { maternal: [], paternal: [] }, notes: "", ...school },
       hfiles: { allergies: [], immunizations: [], labReports: [], lastSyncedAt: null },
     },
   };

@@ -1,7 +1,6 @@
 import { computeBmi } from "@/lib/data/seed/student-factory";
-import type { SchoolMedicalHistory, Surgery } from "@/lib/types/medical-history";
+import type { SchoolMedicalHistory } from "@/lib/types/medical-history";
 import type { Student, StudentStatus } from "@/lib/types/student";
-import { newId } from "../helpers";
 import type { SliceCreator } from "../state";
 import { buildStudent, classTeacher, type NewStudentInput } from "../student-builder";
 
@@ -16,7 +15,6 @@ export type StudentsSlice = {
   importStudents: (inputs: NewStudentInput[], source: string) => string[];
   updateStudent: (id: string, patch: StudentPatch, reason?: string) => void;
   updateSchoolMedicalHistory: (id: string, patch: Partial<SchoolMedicalHistory>, reason?: string) => void;
-  addSurgery: (id: string, surgery: Omit<Surgery, "id">) => void;
   setStudentStatus: (id: string, status: StudentStatus, reason: string) => void;
 };
 
@@ -47,7 +45,8 @@ export const createStudentsSlice: SliceCreator<StudentsSlice> = (set, get) => {
       replace(id, (s) => {
         const next = { ...s, ...patch };
         next.bmi = computeBmi(next.heightCm, next.weightKg);
-        if (patch.grade || patch.division) {
+        // Only re-derive the class teacher when the caller didn't explicitly set one themselves.
+        if ((patch.grade || patch.division) && !patch.classTeacherId) {
           next.classTeacherId = classTeacher(get().staff, next.grade, next.division);
         }
         return next;
@@ -61,17 +60,6 @@ export const createStudentsSlice: SliceCreator<StudentsSlice> = (set, get) => {
         medicalHistory: { ...s.medicalHistory, school: { ...s.medicalHistory.school, ...patch } },
       }));
       get().logAudit("medical-history.updated", nameOf(id), reason);
-    },
-
-    addSurgery: (id, surgery) => {
-      replace(id, (s) => ({
-        ...s,
-        medicalHistory: {
-          ...s.medicalHistory,
-          school: { ...s.medicalHistory.school, surgeries: [{ ...surgery, id: newId("surg") }, ...s.medicalHistory.school.surgeries] },
-        },
-      }));
-      get().logAudit("medical-history.surgery-added", nameOf(id), surgery.name);
     },
 
     setStudentStatus: (id, status, reason) => {

@@ -18,7 +18,6 @@ type StudentProfileShellProps = { id: string; children: ReactNode };
 export function StudentProfileShell({ id, children }: StudentProfileShellProps) {
   const hydrated = useStoreHydrated();
   const student = useAppStore((s) => s.students.find((st) => st.id === id));
-  const teacher = useAppStore((s) => s.staff.find((st) => st.id === student?.classTeacherId));
 
   if (!hydrated) {
     return (
@@ -51,7 +50,7 @@ export function StudentProfileShell({ id, children }: StudentProfileShellProps) 
 
   return (
     <div className="flex flex-col gap-6">
-      <ProfileHeader student={student} teacherName={teacher?.name ?? "Not assigned"} />
+      <ProfileHeader student={student} />
       <TabNav
         label="Student profile sections"
         items={STUDENT_TABS.map((t) => ({ href: studentTabHref(student.id, t.segment), label: t.label }))}

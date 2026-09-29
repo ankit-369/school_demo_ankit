@@ -57,7 +57,7 @@ export function CampHistoryTab() {
         />
       )}
       {groups.map((g) => (
-        <CampHistoryGroup key={g[0].camp.id} camp={g[0].camp} rows={g} studentName={student.name} />
+        <CampHistoryGroup key={g[0].camp.id} camp={g[0].camp} rows={g} studentId={student.id} studentName={student.name} />
       ))}
     </div>
   );

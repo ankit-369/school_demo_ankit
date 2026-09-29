@@ -1,6 +1,6 @@
 export type ImportFieldKey =
   | "name" | "dob" | "gender" | "grade" | "division" | "rollNumber" | "bloodGroup" | "heightCm" | "weightKg"
-  | "guardianName" | "guardianRelation" | "guardianPhone" | "house" | "transport" | "allergies" | "conditions" | "notes";
+  | "allergies" | "conditions" | "guardianName" | "guardianPhone";
 
 export type ImportField = {
   key: ImportFieldKey;
@@ -21,14 +21,10 @@ export const IMPORT_FIELDS: ImportField[] = [
   { key: "bloodGroup", label: "Blood group", required: true, hint: "e.g. O+, AB-", synonyms: ["blood group", "blood", "blood type"] },
   { key: "heightCm", label: "Height (cm)", required: true, synonyms: ["height", "height (cm)", "height cm"] },
   { key: "weightKg", label: "Weight (kg)", required: true, synonyms: ["weight", "weight (kg)", "weight kg"] },
+  { key: "allergies", label: "Allergies", required: false, hint: "Separate with ;", synonyms: ["allergies", "allergy"] },
+  { key: "conditions", label: "Conditions", required: false, hint: "Separate with ;", synonyms: ["conditions", "condition", "medical conditions"] },
   { key: "guardianName", label: "Guardian name", required: true, synonyms: ["guardian", "guardian name", "parent", "parent name"] },
   { key: "guardianPhone", label: "Guardian phone", required: true, synonyms: ["phone", "guardian phone", "parent phone", "mobile", "contact"] },
-  { key: "guardianRelation", label: "Guardian relation", required: false, hint: "Mother/Father/Guardian", synonyms: ["relation", "relationship", "guardian relation"] },
-  { key: "house", label: "House", required: false, synonyms: ["house"] },
-  { key: "transport", label: "Transport", required: false, synonyms: ["transport", "commute"] },
-  { key: "allergies", label: "Allergies", required: false, hint: "Separate with ; or |", synonyms: ["allergies", "allergy"] },
-  { key: "conditions", label: "Conditions", required: false, hint: "Separate with ; or |", synonyms: ["conditions", "condition", "medical conditions"] },
-  { key: "notes", label: "Nurse notes", required: false, synonyms: ["notes", "nurse notes", "remarks"] },
 ];
 
 /** Column index per field (-1 = not mapped). */

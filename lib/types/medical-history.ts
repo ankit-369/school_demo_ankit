@@ -31,6 +31,7 @@ export type SchoolMedicalHistory = {
   allergies: string[];
   conditions: string[];
   surgeries: Surgery[];
+  familyHistory: { maternal: string[]; paternal: string[] };
   notes: string;
 };
 

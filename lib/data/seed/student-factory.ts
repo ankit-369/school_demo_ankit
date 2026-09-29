@@ -6,7 +6,7 @@ import type {
   LabReport,
   Surgery,
 } from "@/lib/types/medical-history";
-import type { BloodGroup, Gender, Guardian, HearingStatus, House, Student, Transport } from "@/lib/types/student";
+import type { BloodGroup, EmergencyContact, Gender, Guardian, HearingStatus, House, Student, Transport } from "@/lib/types/student";
 import { STAFF_IDS } from "./staff";
 
 type WithoutId<T> = Omit<T, "id">;
@@ -24,11 +24,14 @@ export type StudentSeed = {
   heightCm: number;
   weightKg: number;
   guardian: [name: string, relation: Guardian["relation"]];
+  /** Defaults to the same person as `guardian` when omitted. */
+  emergencyContact?: EmergencyContact;
   vision?: string;
   hearing?: HearingStatus;
   allergies?: string[];
   conditions?: string[];
   surgeries?: WithoutId<Surgery>[];
+  familyHistory?: { maternal?: string[]; paternal?: string[] };
   notes?: string;
   hfiles?: {
     lastSyncedAt: string;
@@ -97,12 +100,16 @@ export function makeStudent(s: StudentSeed): Student {
       relation: s.guardian[1],
       phone: formatPhone(),
     },
+    emergencyContact: s.emergencyContact ?? { name: s.guardian[0], relation: s.guardian[1], phone: formatPhone() },
+    motherName: s.guardian[1] === "Mother" ? s.guardian[0] : undefined,
+    fatherName: s.guardian[1] === "Father" ? s.guardian[0] : undefined,
     status: "active",
     medicalHistory: {
       school: {
         allergies: s.allergies ?? [],
         conditions: s.conditions ?? [],
         surgeries: withIds(`${id}-surg`, s.surgeries),
+        familyHistory: { maternal: s.familyHistory?.maternal ?? [], paternal: s.familyHistory?.paternal ?? [] },
         notes: s.notes ?? "",
       },
       hfiles,

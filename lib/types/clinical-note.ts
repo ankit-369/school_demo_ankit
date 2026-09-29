@@ -30,4 +30,6 @@ export type ClinicalNote = {
   notNeededReason?: string;
   /** Set when a promotion archived this entry, e.g. "2026-27". Data is kept; current views hide it by default. */
   archivedYear?: string;
+  /** Set the first time the note's own text is edited after creation. */
+  editedAt?: string;
 };

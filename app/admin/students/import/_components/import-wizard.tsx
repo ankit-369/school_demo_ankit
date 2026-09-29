@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { CircleCheck, Lock } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { Button } from "@/components/ui/button";
@@ -11,13 +11,14 @@ import { Stepper } from "@/components/ui/stepper";
 import { pluralize } from "@/lib/format";
 import { useCan } from "@/lib/hooks/use-can";
 import { autoMap, type ColumnMapping } from "@/lib/import/import-fields";
-import { normalizeRow } from "@/lib/import/import-row";
+import { newRowId, toDraftValues, type DraftRow } from "@/lib/import/import-row";
 import { useAppStore } from "@/lib/store/app-store";
+import type { NewStudentInput } from "@/lib/store/slices/students-slice";
 import { MappingStep } from "./mapping-step";
 import { PreviewStep } from "./preview-step";
 import { UploadStep, type ParsedCsv } from "./upload-step";
 
-const STEPS = ["Upload CSV", "Map columns", "Preview", "Done"];
+const STEPS = ["Upload CSV", "Map columns", "Review & fix", "Done"];
 
 export function ImportWizard() {
   const can = useCan("manageStudents");
@@ -26,23 +27,16 @@ export function ImportWizard() {
   const [step, setStep] = useState(0);
   const [csv, setCsv] = useState<ParsedCsv>();
   const [mapping, setMapping] = useState<ColumnMapping>();
+  const [rows, setRows] = useState<DraftRow[]>([]);
   const [imported, setImported] = useState(0);
 
-  // +2: 1-based, and the header is row 1 — matches the row numbers people see in Excel.
-  const results = useMemo(() => {
-    if (!csv || !mapping) return [];
-    const seen = new Set<string>();
-    return csv.rows.map((cells, i) => {
-      const r = normalizeRow(cells, i + 2, mapping, students);
-      const key = r.input && `${r.input.name.toLowerCase()}|${r.input.dob}`;
-      if (key && seen.has(key) && r.errors.length === 0) return { ...r, duplicate: true, errors: ["Repeats an earlier row in this file"] };
-      if (key) seen.add(key);
-      return r;
-    });
-  }, [csv, mapping, students]);
+  function toReview() {
+    if (!csv || !mapping) return;
+    setRows(csv.rows.map((cells) => ({ id: newRowId(), values: toDraftValues(cells, mapping) })));
+    setStep(2);
+  }
 
-  function doImport() {
-    const inputs = results.filter((r) => r.input && r.errors.length === 0).map((r) => r.input!);
+  function doImport(inputs: NewStudentInput[]) {
     importStudents(inputs, `CSV import: ${csv?.fileName}`);
     setImported(inputs.length);
     setStep(3);
@@ -71,8 +65,8 @@ export function ImportWizard() {
                 }}
               />
             )}
-            {step === 1 && csv && mapping && <MappingStep csv={csv} mapping={mapping} onChange={setMapping} onBack={() => setStep(0)} onNext={() => setStep(2)} />}
-            {step === 2 && <PreviewStep results={results} onBack={() => setStep(1)} onImport={doImport} />}
+            {step === 1 && csv && mapping && <MappingStep csv={csv} mapping={mapping} onChange={setMapping} onBack={() => setStep(0)} onNext={toReview} />}
+            {step === 2 && <PreviewStep rows={rows} onChange={setRows} existingStudents={students} onBack={() => setStep(1)} onImport={doImport} />}
             {step === 3 && (
               <EmptyState
                 icon={CircleCheck}
@@ -81,7 +75,7 @@ export function ImportWizard() {
                 action={
                   <div className="flex flex-wrap justify-center gap-2">
                     <Button asChild><Link href="/admin/students">View directory</Link></Button>
-                    <Button variant="outline" onClick={() => { setCsv(undefined); setMapping(undefined); setStep(0); }}>Import another file</Button>
+                    <Button variant="outline" onClick={() => { setCsv(undefined); setMapping(undefined); setRows([]); setStep(0); }}>Import another file</Button>
                   </div>
                 }
               />

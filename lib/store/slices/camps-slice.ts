@@ -15,6 +15,8 @@ export type CampsSlice = {
   addScreening: (campId: string, input: NewScreeningInput) => string;
   /** Upserts one student's result for a screening. */
   recordScreeningResult: (campId: string, screeningId: string, result: ScreeningResult) => void;
+  /** Edits an already-recorded result from the student's profile; unlike recordScreeningResult, this is audited. */
+  updateScreeningResult: (campId: string, screeningId: string, studentId: string, patch: Partial<Pick<ScreeningResult, "status" | "notes">>, summary: string) => void;
 };
 
 function toScreening(campId: string, input: NewScreeningInput): Screening {
@@ -56,5 +58,19 @@ export const createCampsSlice: SliceCreator<CampsSlice> = (set, get) => {
           };
         }),
       })),
+
+    updateScreeningResult: (campId, screeningId, studentId, patch, summary) => {
+      replaceCamp(campId, (c) => ({
+        ...c,
+        screenings: c.screenings.map((scr) =>
+          scr.id !== screeningId
+            ? scr
+            : { ...scr, results: scr.results.map((r) => (r.studentId === studentId ? { ...r, ...patch } : r)) },
+        ),
+      }));
+      const camp = get().camps.find((c) => c.id === campId);
+      const studentName = get().students.find((s) => s.id === studentId)?.name ?? studentId;
+      get().logAudit("camp.result-updated", `${camp?.name ?? campId} — ${studentName}`, summary);
+    },
   };
 };

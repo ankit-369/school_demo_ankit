@@ -70,6 +70,7 @@ export const seniorStudentSeeds: StudentSeed[] = [
     seq: 19, name: "Kiara Malhotra", gender: "female", dob: "2012-10-14", grade: "9", division: "A", roll: 15,
     blood: "O+", heightCm: 160, weightKg: 50, guardian: ["Ritu Malhotra", "Mother"],
     conditions: ["Type 1 diabetes"], notes: "Checks glucose before lunch in the health centre.",
+    familyHistory: { maternal: ["Type 2 diabetes"], paternal: [] },
     hfiles: {
       lastSyncedAt: "2026-09-21T09:35:00Z",
       labReports: [{ name: "HbA1c", date: "2026-07-03", lab: "Metropolis Labs", summary: "HbA1c 8.1% — above target, endocrinologist reviewing." }],

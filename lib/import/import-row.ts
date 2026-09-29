@@ -1,14 +1,31 @@
 import type { NewStudentInput } from "@/lib/store/slices/students-slice";
 import { DIVISIONS, GRADES, type Division, type Grade } from "@/lib/types/grade";
-import type { BloodGroup, Guardian, House, Student, Transport } from "@/lib/types/student";
+import type { BloodGroup, House, Student } from "@/lib/types/student";
 import type { ColumnMapping, ImportFieldKey } from "./import-fields";
+
+export type DraftValues = Record<ImportFieldKey, string>;
 
 export type ImportRowResult = {
   line: number;
   input?: NewStudentInput;
   errors: string[];
-  duplicate?: boolean;
 };
+
+/** One editable row in the review step; `id` is stable across edits, reorders and undo. */
+export type DraftRow = { id: string; values: DraftValues };
+
+export function newRowId() {
+  return `row-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+}
+
+const FIELD_KEYS: ImportFieldKey[] = [
+  "name", "dob", "gender", "grade", "division", "rollNumber", "bloodGroup", "heightCm", "weightKg",
+  "allergies", "conditions", "guardianName", "guardianPhone",
+];
+
+export function emptyDraftValues(): DraftValues {
+  return Object.fromEntries(FIELD_KEYS.map((k) => [k, ""])) as DraftValues;
+}
 
 const HOUSES: House[] = ["Ganga", "Yamuna", "Kaveri", "Narmada"];
 const BLOOD: BloodGroup[] = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
@@ -29,6 +46,13 @@ function parseGradeLoose(v: string): Grade | null {
   return (GRADES as readonly string[]).includes(g) ? (g as Grade) : null;
 }
 
+function parseGenderLoose(v: string): "Male" | "Female" | null {
+  const g = v.trim().toLowerCase();
+  if (["m", "male", "boy"].includes(g)) return "Male";
+  if (["f", "female", "girl"].includes(g)) return "Female";
+  return null;
+}
+
 function parseBlood(v: string): BloodGroup | null {
   const b = v.toUpperCase().replace(/\s+/g, "").replace(/VE$/, "").replace(/POS(ITIVE)?$/, "+").replace(/NEG(ATIVE)?$/, "-");
   return BLOOD.includes(b as BloodGroup) ? (b as BloodGroup) : null;
@@ -36,9 +60,36 @@ function parseBlood(v: string): BloodGroup | null {
 
 const list = (v: string) => v.split(/[;|]/).map((x) => x.trim()).filter(Boolean).map((x) => x.charAt(0).toUpperCase() + x.slice(1));
 
-/** Validates and converts one CSV row; `existing` is used to flag duplicates (same name + DOB). */
-export function normalizeRow(cells: string[], line: number, mapping: ColumnMapping, existing: Student[]): ImportRowResult {
-  const get = (k: ImportFieldKey) => (mapping[k] >= 0 ? (cells[mapping[k]] ?? "").trim() : "");
+/**
+ * Extracts one row's field values from the raw CSV cells, using the column
+ * mapping chosen in step 2. Grade/division/gender/blood group are
+ * normalised to their canonical form where possible (e.g. "Grade 8" → "8",
+ * "Male" stays "Male") so the review step's dropdowns start pre-selected;
+ * an unrecognised value is left as-is so its error message stays useful.
+ */
+export function toDraftValues(cells: string[], mapping: ColumnMapping): DraftValues {
+  const values = emptyDraftValues();
+  FIELD_KEYS.forEach((k) => {
+    values[k] = mapping[k] >= 0 ? (cells[mapping[k]] ?? "").trim() : "";
+  });
+  values.grade = parseGradeLoose(values.grade) ?? values.grade;
+  values.division = (DIVISIONS as readonly string[]).includes(values.division.toUpperCase()) ? values.division.toUpperCase() : values.division;
+  values.gender = parseGenderLoose(values.gender) ?? values.gender;
+  values.bloodGroup = parseBlood(values.bloodGroup) ?? values.bloodGroup;
+  return values;
+}
+
+/** A row's grade/division/roll, used for the duplicate-roll-in-class check. */
+export type RollKey = { id: string; grade: Grade; division: Division; roll: number };
+
+/**
+ * Validates one draft row. `existing` catches a student already in the
+ * directory (same name+DOB, or the same roll already used in that class);
+ * `otherRows` (every OTHER row's RollKey, `rowId` already excluded) catches
+ * two rows in this same import clashing on a roll number.
+ */
+export function validateDraftRow(values: DraftValues, rowId: string, line: number, existing: Student[], otherRows: RollKey[]): ImportRowResult {
+  const get = (k: ImportFieldKey) => (values[k] ?? "").trim();
   const errors: string[] = [];
   const need = <T,>(label: string, raw: string, parsed: T | null): T | undefined => {
     if (!raw) errors.push(`${label} is missing`);
@@ -66,24 +117,28 @@ export function normalizeRow(cells: string[], line: number, mapping: ColumnMappi
   const phone = get("guardianPhone");
   if (!/^\+?[\d\s-]{10,16}$/.test(phone)) errors.push(phone ? `Phone "${phone}" isn't valid` : "Guardian phone is missing");
 
-  if (errors.length) return { line, errors };
+  if (grade && division && rollNumber !== undefined) {
+    const inSameClass = (s: Student) => s.status === "active" && s.grade === grade && s.division === division && s.rollNumber === rollNumber;
+    const clash =
+      existing.some(inSameClass) || otherRows.some((r) => r.id !== rowId && r.grade === grade && r.division === division && r.roll === rollNumber);
+    if (clash) errors.push(`Roll ${rollNumber} is already used in ${grade}-${division}`);
+  }
 
-  const rel = get("guardianRelation").toLowerCase();
-  const relation: Guardian["relation"] = rel === "mother" ? "Mother" : rel === "father" ? "Father" : "Guardian";
-  const house = HOUSES.find((x) => x.toLowerCase() === get("house").toLowerCase()) ?? HOUSES[line % HOUSES.length];
-  const t = get("transport").toLowerCase();
-  const transport: Transport = t.includes("bus") ? "school-bus" : t.includes("walk") ? "walker" : t ? "private" : "school-bus";
-  const duplicate = existing.some((s) => s.name.toLowerCase() === name.toLowerCase() && s.dob === dob);
+  const duplicate = Boolean(name && dob) && existing.some((s) => s.status === "active" && s.name.toLowerCase() === name.toLowerCase() && s.dob === dob);
+  if (duplicate) errors.push("Already in the directory (same name and date of birth)");
+
+  if (errors.length) return { line, errors };
 
   return {
     line,
-    duplicate,
-    errors: duplicate ? ["Already in the directory (same name and date of birth)"] : [],
+    errors: [],
     input: {
       name, dob: dob!, gender: gender as "male" | "female", grade: grade!, division: division!, rollNumber: rollNumber!,
-      bloodGroup: bloodGroup!, heightCm: heightCm!, weightKg: weightKg!, vision: "6/6", hearing: "normal", house, transport,
-      guardian: { name: guardianName, relation, phone },
-      school: { allergies: list(get("allergies")), conditions: list(get("conditions")), notes: get("notes") },
+      bloodGroup: bloodGroup!, heightCm: heightCm!, weightKg: weightKg!, vision: "6/6", hearing: "normal",
+      house: HOUSES[line % HOUSES.length], transport: "school-bus",
+      guardian: { name: guardianName, relation: "Guardian", phone },
+      emergencyContact: { name: guardianName, relation: "Guardian", phone },
+      school: { allergies: list(get("allergies")), conditions: list(get("conditions")), notes: "" },
     },
   };
 }

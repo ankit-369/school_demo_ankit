@@ -1,21 +1,28 @@
+"use client";
+
 import { Calendar } from "lucide-react";
 import { ArchivedBadge } from "@/components/ui/archive-toggle";
 import { Panel } from "@/components/ui/panel";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { formatDate, formatDateRange } from "@/lib/format";
 import { CAMP_PHASE, RESULT_STATUS, SCREENING_TYPE_LABELS } from "@/lib/labels";
+import { can } from "@/lib/permissions";
 import { campPhase } from "@/lib/selectors/camps";
 import type { StudentScreeningRow } from "@/lib/selectors/students";
+import { useAppStore } from "@/lib/store/app-store";
 import type { Camp } from "@/lib/types/camp";
 import { ResultDialog } from "./result-dialog";
 
 type CampHistoryGroupProps = {
   camp: Camp;
   rows: StudentScreeningRow[];
+  studentId: string;
   studentName: string;
 };
 
-export function CampHistoryGroup({ camp, rows, studentName }: CampHistoryGroupProps) {
+export function CampHistoryGroup({ camp, rows, studentId, studentName }: CampHistoryGroupProps) {
+  const role = useAppStore((s) => s.role);
+  const canEdit = can(role, "editMedical");
   const phase = campPhase(camp);
   const missedLabel = phase === "upcoming" ? "Scheduled" : phase === "completed" ? "Not screened" : "Not yet screened";
   return (
@@ -47,7 +54,7 @@ export function CampHistoryGroup({ camp, rows, studentName }: CampHistoryGroupPr
             <div className="flex items-center justify-between gap-3 sm:justify-end">
               {result ? <StatusBadge {...RESULT_STATUS[result.status]} /> : <StatusBadge tone="neutral" label={missedLabel} />}
               {result && result.status !== "pending" ? (
-                <ResultDialog row={{ camp, screening, result }} studentName={studentName} />
+                <ResultDialog row={{ camp, screening, result }} studentId={studentId} studentName={studentName} canEdit={canEdit} />
               ) : (
                 <span className="w-[108px]" aria-hidden />
               )}

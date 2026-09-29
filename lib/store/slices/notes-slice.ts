@@ -24,6 +24,8 @@ export type NotesSlice = {
   /** Sends the (possibly edited) draft message and marks the note notified. */
   notifyGuardianForNote: (noteId: string, message: string, channel: NotificationChannel) => void;
   markGuardianNotNeeded: (noteId: string, reason?: string) => void;
+  updateClinicalNote: (noteId: string, notes: string) => void;
+  deleteClinicalNote: (noteId: string, reason: string) => void;
 };
 
 export const createNotesSlice: SliceCreator<NotesSlice> = (set, get) => {
@@ -88,6 +90,22 @@ export const createNotesSlice: SliceCreator<NotesSlice> = (set, get) => {
       }));
       const name = get().students.find((s) => s.id === note.studentId)?.name ?? "Student";
       get().logAudit("clinical-note.guardian-not-needed", name, reason ?? "");
+    },
+
+    updateClinicalNote: (noteId, notes) => {
+      const note = get().notes.find((n) => n.id === noteId);
+      if (!note) return;
+      set((s) => ({ notes: s.notes.map((n) => (n.id === noteId ? { ...n, notes, editedAt: nowIso() } : n)) }));
+      const name = get().students.find((s) => s.id === note.studentId)?.name ?? "Student";
+      get().logAudit("clinical-note.updated", name);
+    },
+
+    deleteClinicalNote: (noteId, reason) => {
+      const note = get().notes.find((n) => n.id === noteId);
+      if (!note) return;
+      set((s) => ({ notes: s.notes.filter((n) => n.id !== noteId) }));
+      const name = get().students.find((s) => s.id === note.studentId)?.name ?? "Student";
+      get().logAudit("clinical-note.deleted", name, reason);
     },
   };
 };
