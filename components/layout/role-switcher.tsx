@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowUpRight, ChevronDown, Eye } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Compass, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -67,6 +67,13 @@ export function RoleSwitcher() {
             </Link>
           </DropdownMenuItem>
         ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild className="h-9 pointer-coarse:h-11">
+          <Link href="/guide">
+            Demo guide
+            <Compass aria-hidden className="ml-auto size-4 text-ink-faint" />
+          </Link>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

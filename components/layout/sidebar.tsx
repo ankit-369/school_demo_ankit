@@ -1,5 +1,7 @@
 "use client";
 
+import { Compass } from "lucide-react";
+import Link from "next/link";
 import { useSchoolName } from "@/lib/hooks/use-school-name";
 import { Brand } from "./brand";
 import { SidebarNav } from "./sidebar-nav";
@@ -18,6 +20,13 @@ export function Sidebar() {
       <div className="border-t border-line py-4">
         <p className="truncate px-3 pb-3 text-[13px] font-medium text-ink-faint">{schoolName}</p>
         <SidebarUser />
+        <Link
+          href="/guide"
+          className="mt-3 flex items-center gap-2 px-3 text-[13px] font-medium text-ink-soft transition-colors duration-150 hover:text-ink"
+        >
+          <Compass aria-hidden className="size-4 text-ink-faint" />
+          Demo guide
+        </Link>
       </div>
     </aside>
   );

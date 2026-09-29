@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { BackToGuidePill } from "@/components/layout/back-to-guide-pill";
 import { SchoolTitleSync } from "@/components/layout/school-title-sync";
 import { Toaster } from "@/components/ui/sonner";
 import { StoreHydrator } from "@/lib/store/store-hydrator";
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <StoreHydrator />
         <SchoolTitleSync />
+        <BackToGuidePill />
         <Toaster position="top-right" />
       </body>
     </html>
